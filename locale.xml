@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locales>
+  <groups name="quiqqer/payment-paymill" datatype="php,js">
+    <locale name="package.title">
+      <de><![CDATA[Paymill Kreditkartenzahlung für QUIQQER ERP]]></de>
+      <en><![CDATA[Paymill credit card payment for QUIQQER ERP]]></en>
+    </locale>
+  <locale name="package.description"><de><![CDATA[Bietet die Möglichkeit, Bestellungen per Kreditkarte zu bezahlen]]></de><en><![CDATA[Offers the option to pay order with a credit card]]></en></locale></groups>
+</locales>

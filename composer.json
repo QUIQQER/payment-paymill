@@ -1,0 +1,28 @@
+{
+    "name" : "quiqqer/payment-paymill",
+    "type" : "quiqqer-module",
+    "description" : "Paymill - Payment method for QUIQQER ERP stack",
+    "version" : "dev-dev",
+    "license" : "GPL-3.0+",
+    "authors" : [
+        {
+            "name": "Patrick Müller",
+            "email": "p.mueller@pcsg.de",
+            "homepage": "http://www.pcsg.de",
+            "role": "Developer"
+        }
+    ],
+    "support" : {
+        "email": "support@pcsg.de",
+        "url": "http://www.pcsg.de"
+    },
+    "require": {
+        
+    }
+    ,"autoload": {
+  "psr-4": {
+      "QUI\\ERP\\Payments\\Paymill\\": "src/QUI/ERP/Payments/Paymill"
+   }
+}
+
+}
