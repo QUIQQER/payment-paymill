@@ -1,19 +1,18 @@
 <?php
 
 /**
- * This file contains QUI\ERP\Payments\PayPal\Provider
+ * This file contains QUI\ERP\Payments\Paymill\Provider
  */
 
 namespace QUI\ERP\Payments\Paymill;
 
 use QUI;
 use QUI\ERP\Accounting\Payments\Api\AbstractPaymentProvider;
-use QUI\ERP\Accounting\Payments\Types\Factory as PaymentsFactory;
 
 /**
  * Class Provider
  *
- * PaymentProvider class for PayPal
+ * PaymentProvider class for Paymill
  */
 class Provider extends AbstractPaymentProvider
 {
@@ -82,7 +81,7 @@ class Provider extends AbstractPaymentProvider
     }
 
     /**
-     * Check if the PayPal API settings are correct
+     * Check if the Paymill API settings are correct
      *
      * @return bool
      * @throws QUI\Exception
@@ -95,8 +94,8 @@ class Provider extends AbstractPaymentProvider
         foreach ($apiSettings as $k => $v) {
             if (empty($v)) {
                 QUI\System\Log::addError(
-                    'Your PayPal API credentials seem to be (partially) missing.'
-                    . ' PayPal CAN NOT be used at the moment. Please enter all your'
+                    'Your Paymill API credentials seem to be (partially) missing.'
+                    . ' Paymill CAN NOT be used at the moment. Please enter all your'
                     . ' API credentials. See https://dev.quiqqer.com/quiqqer/payment-paymill/wikis/api-configuration'
                     . ' for further instructions.'
                 );

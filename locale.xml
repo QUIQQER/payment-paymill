@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
     <groups name="quiqqer/payment-paymill" datatype="php,js">
+
         <locale name="package.title">
             <de><![CDATA[Paymill Kreditkartenzahlung für QUIQQER ERP]]></de>
             <en><![CDATA[Paymill credit card payment for QUIQQER ERP]]></en>
@@ -8,6 +9,10 @@
         <locale name="package.description">
             <de><![CDATA[Bietet die Möglichkeit, Bestellungen per Kreditkarte zu bezahlen]]></de>
             <en><![CDATA[Offers the option to pay orders with a credit card]]></en>
+        </locale>
+        <locale name="payment.title">
+            <de><![CDATA[Paymill Kreditkartenzahlung]]></de>
+            <en><![CDATA[Paymill credit card payment]]></en>
         </locale>
 
         <!-- Settings -->
@@ -30,6 +35,50 @@
         <locale name="settings.api.public_key.description">
             <de><![CDATA[Den "Public Key" ihres Paymill-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die Paymill-Integration Ihres Shops zu testen.]]></de>
             <en><![CDATA[You can find the "Public Key" of your Paymill account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the Paymill integration of your shop.]]></en>
+        </locale>
+        <locale name="settings.api.private_key.title">
+            <de><![CDATA[Private Key]]></de>
+            <en><![CDATA[Private Key]]></en>
+        </locale>
+        <locale name="settings.api.private_key.description">
+            <de><![CDATA[Den "Private Key" ihres Paymill-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die Paymill-Integration Ihres Shops zu testen.]]></de>
+            <en><![CDATA[You can find the "Private Key" of your Paymill account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the Paymill integration of your shop.]]></en>
+        </locale>
+
+        <!-- PaymentDisplay -->
+        <locale name="PaymentDisplay.configuration_error">
+            <de><![CDATA[Die Zahlung mit Paymill kann zur Zeit leider nicht durchgeführt werden. Bitte wählen Sie eine andere Zahlungsweise.]]></de>
+            <en><![CDATA[Unfortunately, Paymill payment can not be used at the moment. Please choose a different method of payment.]]></en>
+        </locale>
+        <locale name="PaymentDisplay.processing_error">
+            <de><![CDATA[Beim Bezahlungsvorgang mit Paymill ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <en><![CDATA[An error occurred while paying with Paymill. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
+        </locale>
+        <locale name="PaymentDisplay.no_javascript">
+            <de><![CDATA[In Ihrem Browser ist JavaScript deaktiviert. Um Zahlungen mit Paymill durchzuführen, aktivieren Sie bitte JavaScript.]]></de>
+            <en><![CDATA[JavaScript is deactivated in your browser. To make payments using Paymill, please enable JavaScript.]]></en>
+        </locale>
+        <locale name="PaymentDisplay.header.title">
+            <de><![CDATA[Bezahlung mit Paymill]]></de>
+            <en><![CDATA[Payment with Paymill]]></en>
+        </locale>
+
+    </groups>
+
+    <groups name="quiqqer/payment-paymill" datatype="js">
+
+        <!-- Control: PaymentDisplay -->
+        <locale name="PaymentDisplay.info">
+            <de><![CDATA[Bitte geben Sie Ihre Kreditkarten-Daten im sicheren PAYMILL-Formular an, um mit der Bezahlung fortzufahren.]]></de>
+            <en><![CDATA[Please provide your credit card data in the secure PAYMILL form to continue the payment process.]]></en>
+        </locale>
+        <locale name="PaymentDisplay.btn_pay.text" html="true">
+            <de><![CDATA[Jetzt <b>[display_price]</b> bezahlen]]></de>
+            <en><![CDATA[Pay <b>[display_price]</b> now]]></en>
+        </locale>
+        <locale name="PaymentDisplay.btn_pay.title" html="true">
+            <de><![CDATA[Hier klicken, um ihre Bestellung im Wert von [display_price] mit ihrer Kreditkarte zu bezahlen]]></de>
+            <en><![CDATA[Click here to pay your order with a value of [display_price with your credit card]]></en>
         </locale>
 
     </groups>

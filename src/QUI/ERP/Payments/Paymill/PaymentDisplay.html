@@ -1,0 +1,15 @@
+<noscript>
+    <p>{locale group="quiqqer/payment-paymill" var="PaymentDisplay.no_javascript"}</p>
+</noscript>
+
+{if !$apiSetUp}
+<p class="message-error">
+    {locale group="quiqqer/payment-paymill" var="PaymentDisplay.configuration_error"}
+</p>
+{else}
+<div class="quiqqer-payment-paymill-message"></div>
+<div class="quiqqer-payment-paymill-content">
+    <div id="quiqqer-payment-paymill-frame"></div>
+    <div class="quiqqer-payment-paymill-btn-pay" data-price="{$display_price}"></div>
+</div>
+{/if}
