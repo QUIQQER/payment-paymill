@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
-  <groups name="quiqqer/payment-paymill" datatype="php,js">
-    <locale name="package.title">
-      <de><![CDATA[Paymill Kreditkartenzahlung für QUIQQER ERP]]></de>
-      <en><![CDATA[Paymill credit card payment for QUIQQER ERP]]></en>
-    </locale>
-  <locale name="package.description"><de><![CDATA[Bietet die Möglichkeit, Bestellungen per Kreditkarte zu bezahlen]]></de><en><![CDATA[Offers the option to pay order with a credit card]]></en></locale></groups>
+    <groups name="quiqqer/payment-paymill" datatype="php,js">
+        <locale name="package.title">
+            <de><![CDATA[Paymill Kreditkartenzahlung für QUIQQER ERP]]></de>
+            <en><![CDATA[Paymill credit card payment for QUIQQER ERP]]></en>
+        </locale>
+        <locale name="package.description">
+            <de><![CDATA[Bietet die Möglichkeit, Bestellungen per Kreditkarte zu bezahlen]]></de>
+            <en><![CDATA[Offers the option to pay orders with a credit card]]></en>
+        </locale>
+
+        <!-- Settings -->
+        <locale name="settings.menu.title">
+            <de><![CDATA[Paymill]]></de>
+            <en><![CDATA[Paymill]]></en>
+        </locale>
+        <locale name="settings.category.api.title">
+            <de><![CDATA[API-Einstellungen]]></de>
+            <en><![CDATA[API settings]]></en>
+        </locale>
+        <locale name="settings.api.title">
+            <de><![CDATA[API-Einstellungen]]></de>
+            <en><![CDATA[API settings]]></en>
+        </locale>
+        <locale name="settings.api.public_key.title">
+            <de><![CDATA[Public Key]]></de>
+            <en><![CDATA[Public Key]]></en>
+        </locale>
+        <locale name="settings.api.public_key.description">
+            <de><![CDATA[Den "Public Key" ihres Paymill-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die Paymill-Integration Ihres Shops zu testen.]]></de>
+            <en><![CDATA[You can find the "Public Key" of your Paymill account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the Paymill integration of your shop.]]></en>
+        </locale>
+
+    </groups>
 </locales>

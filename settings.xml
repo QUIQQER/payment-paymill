@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiqqer>
+    <settings>
+
+        <config>
+
+            <section name="api">
+                <conf name="public_key">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="private_key">
+                    <type><![CDATA[string]]></type>
+                </conf>
+            </section>
+
+        </config>
+
+        <window>
+            <title>
+                <locale group="quiqqer/payment-paymill" var="settings.menu.title"/>
+            </title>
+
+            <params>
+                <icon>fa fa-credit-card</icon>
+            </params>
+
+            <categories>
+                <category name="api">
+                    <icon>fa fa-cogs</icon>
+                    <title>
+                        <locale group="quiqqer/payment-paymill" var="settings.category.api.title"/>
+                    </title>
+                    <settings title="api" name="api">
+                        <title>
+                            <locale group="quiqqer/payment-paymill" var="settings.api.title"/>
+                        </title>
+
+                        <input conf="api.public_key" type="text">
+                            <text>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.public_key.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.public_key.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="api.private_key" type="text">
+                            <text>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.private_key.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.private_key.description"/>
+                            </description>
+                        </input>
+
+                    </settings>
+                </category>
+
+            </categories>
+        </window>
+
+    </settings>
+</quiqqer>
