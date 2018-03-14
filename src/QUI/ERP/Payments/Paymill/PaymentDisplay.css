@@ -1,13 +1,17 @@
 .quiqqer-payment-paymill-content {
     float: left;
-    min-height: 250px;
+    min-height: 350px;
+    max-width: 350px;
+}
+
+.quiqqer-payment-paymill-btn-pay {
+    margin: 20px 0 0 0;
+    text-align: center;
     width: 100%;
 }
 
-#quiqqer-payment-paymill-btn-pay {
-    margin: 35px 0 0 0;
-    max-width: 100%;
-    text-align: center;
+.quiqqer-payment-paymill-btn-pay > button {
+    width: 100% !important;
 }
 
 .quiqqer-payment-paymill__hidden {

@@ -134,7 +134,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
             };
 
             var checkoutLoaderShow = function () {
-                self.Loader.show(
+                self.$OrderProcess.Loader.show(
                     QUILocale.get(pkg, 'PaymentDisplay.checkout_process')
                 );
 
@@ -143,7 +143,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
             };
 
             var checkoutLoaderHide = function () {
-                self.Loader.hide();
+                self.$OrderProcess.Loader.hide();
                 self.$PayBtn.enable();
                 self.$PayBtn.setAttribute('textimage', 'fa fa-credit-card');
             };
@@ -167,18 +167,13 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
 
                         self.$getPaymillToken().then(function (token) {
                             self.$checkout(token).then(function () {
-
+                                self.$OrderProcess.next();
                             }, function (Error) {
                                 checkoutLoaderHide();
-                                self.$showErrorMsg(
-                                    QUILocale.get(pkg,
-                                        'payment.error_msg.general_error'
-                                    )
-                                );
+                                self.$showErrorMsg(Error.getMessage());
                             });
-                        }, function (TokenError) {
+                        }, function () {
                             checkoutLoaderHide();
-                            self.$showErrorMsg(TokenError.getMessage());
                         });
                     }
                 }
