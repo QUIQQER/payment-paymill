@@ -7,6 +7,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
 
     'qui/controls/Control',
     'qui/controls/buttons/Button',
+    'qui/controls/loader/Loader',
 
     'utils/Controls',
 
@@ -15,7 +16,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
 
     'css!package/quiqqer/payment-paymill/bin/controls/PaymentDisplay.css'
 
-], function (QUIControl, QUIButton, QUIControlUtils, QUIAjax, QUILocale) {
+], function (QUIControl, QUIButton, QUILoader, QUIControlUtils, QUIAjax, QUILocale) {
     "use strict";
 
     var pkg = 'quiqqer/payment-paymill';
@@ -50,6 +51,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
             this.$PayBtn       = null;
             this.$MsgElm       = null;
             this.$OrderProcess = null;
+            this.Loader        = new QUILoader();
 
             this.addEvents({
                 onImport: this.$onImport
@@ -66,6 +68,8 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
             if (!Elm.getElement('.quiqqer-payment-paymill-content')) {
                 return;
             }
+
+            this.Loader.inject(Elm);
 
             this.$MsgElm    = Elm.getElement('.quiqqer-payment-paymill-message');
             this.$PayBtnElm = Elm.getElement('.quiqqer-payment-paymill-btn-pay');
@@ -129,12 +133,17 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                 lang: this.getAttribute('displaylang')
             };
 
-            var btnLoaderShow = function () {
+            var checkoutLoaderShow = function () {
+                self.Loader.show(
+                    QUILocale.get(pkg, 'PaymentDisplay.checkout_process')
+                );
+
                 self.$PayBtn.disable();
                 self.$PayBtn.setAttribute('textimage', 'fa fa-spin fa-spinner');
             };
 
-            var btnLoaderHide = function () {
+            var checkoutLoaderHide = function () {
+                self.Loader.hide();
                 self.$PayBtn.enable();
                 self.$PayBtn.setAttribute('textimage', 'fa fa-credit-card');
             };
@@ -154,22 +163,22 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                 textimage: 'fa fa-credit-card',
                 events   : {
                     onClick: function () {
-                        btnLoaderShow();
+                        checkoutLoaderShow();
 
                         self.$getPaymillToken().then(function (token) {
                             self.$checkout(token).then(function () {
 
                             }, function (Error) {
-                                btnLoaderHide();
-
-                                // @todo Error handling
-                                console.log(Error);
+                                checkoutLoaderHide();
+                                self.$showErrorMsg(
+                                    QUILocale.get(pkg,
+                                        'payment.error_msg.general_error'
+                                    )
+                                );
                             });
                         }, function (TokenError) {
-                            btnLoaderHide();
-
-                            // @todo Error handling
-                            console.log(TokenError);
+                            checkoutLoaderHide();
+                            self.$showErrorMsg(TokenError.getMessage());
                         });
                     }
                 }
@@ -179,7 +188,11 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                 self.$OrderProcess.Loader.hide();
 
                 if (Error) {
-                    // @todo error handling
+                    self.$showErrorMsg(
+                        QUILocale.get(pkg,
+                            'payment.error_msg.general_error'
+                        )
+                    );
                     return;
                 }
 
@@ -225,44 +238,6 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                     paymillToken: token,
                     onError     : reject
                 });
-            });
-        },
-
-        /**
-         * Create PayPal Order
-         *
-         * @return {Promise}
-         */
-        $createOrder: function () {
-            var self = this;
-
-            return new Promise(function (resolve, reject) {
-                QUIAjax.post('package_quiqqer_payment-paymill_ajax_createOrder', resolve, {
-                    'package': pkg,
-                    basketId : self.getAttribute('basketid'),
-                    onError  : reject
-                })
-            });
-        },
-
-        /**
-         * Execute PayPal Order
-         *
-         * @param {String} paymentId - PayPal paymentID
-         * @param {String} payerId - PayPal payerID
-         * @return {Promise}
-         */
-        $executeOrder: function (paymentId, payerId) {
-            var self = this;
-
-            return new Promise(function (resolve, reject) {
-                QUIAjax.post('package_quiqqer_payment-paymill_ajax_executeOrder', resolve, {
-                    'package': pkg,
-                    orderHash: self.getAttribute('orderhash'),
-                    paymentId: paymentId,
-                    payerId  : payerId,
-                    onError  : reject
-                })
             });
         },
 

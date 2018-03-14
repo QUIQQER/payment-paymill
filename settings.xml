@@ -35,21 +35,21 @@
                             <locale group="quiqqer/payment-paymill" var="settings.api.title"/>
                         </title>
 
-                        <input conf="api.public_key" type="text">
-                            <text>
-                                <locale group="quiqqer/payment-paymill" var="settings.api.public_key.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/payment-paymill" var="settings.api.public_key.description"/>
-                            </description>
-                        </input>
-
                         <input conf="api.private_key" type="text">
                             <text>
                                 <locale group="quiqqer/payment-paymill" var="settings.api.private_key.title"/>
                             </text>
                             <description>
                                 <locale group="quiqqer/payment-paymill" var="settings.api.private_key.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="api.public_key" type="text">
+                            <text>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.public_key.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.public_key.description"/>
                             </description>
                         </input>
 

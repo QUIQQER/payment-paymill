@@ -1,20 +1,17 @@
 <?php
 
 /**
- * This file contains QUI\ERP\Payments\PayPal\Payment
+ * This file contains QUI\ERP\Payments\PAYMILL\Payment
  */
 
 namespace QUI\ERP\Payments\Paymill;
 
-use PayPal\v1\Payments\OrderAuthorizeRequest;
-use PayPal\v1\Payments\OrderCaptureRequest;
-use PayPal\v1\Payments\OrderVoidRequest;
-use PayPal\v1\Payments\PaymentExecuteRequest;
+use Paymill\Models\Response\Transaction;
+use Paymill\Request as PaymillRequest;
+use Paymill\Models\Request\Base as PaymillBaseRequest;
+use Paymill\Models\Response\Base as PaymillBaseResponse;
+use Paymill\Models\Request\Transaction as PaymillTransactionRequest;
 use QUI\ERP\Accounting\Payments\Gateway\Gateway;
-use PayPal\Core\PayPalHttpClient as PaymillClient;
-use PayPal\Core\ProductionEnvironment;
-use PayPal\Core\SandboxEnvironment;
-use PayPal\v1\Payments\PaymentCreateRequest;
 use QUI;
 use QUI\ERP\Order\AbstractOrder;
 use QUI\ERP\Order\Handler as OrderHandler;
@@ -24,44 +21,51 @@ use QUI\ERP\Accounting\CalculationValue;
 /**
  * Class Payment
  *
- * Main Payment class for PayPal payment processing
+ * Main Payment class for PAYMILL payment processing
  */
 class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
 {
     /**
-     * PayPal API Order attributes
+     * PAYMILL API Order attributes
      */
-    const ATTR_PAYPAL_PAYMENT_ID         = 'paymill-PaymentId';
-    const ATTR_PAYPAL_PAYER_ID           = 'paymill-PayerId';
-    const ATTR_PAYPAL_ORDER_ID           = 'paymill-OrderId';
-    const ATTR_PAYPAL_AUTHORIZATION_ID   = 'paymill-AuthorizationId';
-    const ATTR_PAYPAL_CAPTURE_ID         = 'paymill-CaptureId';
-    const ATTR_PAYPAL_PAYMENT_SUCCESSFUL = 'paymill-PaymentSuccessful';
-    const ATTR_PAYPAL_PAYER_DATA         = 'paymill-PayerData';
+    const ATTR_PAYMILL_TRANSACTION_ID   = 'paymill-TransactionId';
+    const ATTR_PAYMILL_ORDER_SUCCESSFUL = 'paymill-OrderSuccessful';
 
     /**
-     * PayPal REST API request types
+     * PAYMILL REST API request types
      */
-    const PAYPAL_REQUEST_TYPE_CREATE_ORDER    = 'paymill-api-create_order';
-    const PAYPAL_REQUEST_TYPE_EXECUTE_ORDER   = 'paymill-api-execute_order';
-    const PAYPAL_REQUEST_TYPE_AUTHORIZE_ORDER = 'paymill-api-authorize_order';
-    const PAYPAL_REQUEST_TYPE_CAPTURE_ORDER   = 'paymill-api-capture_order';
-    const PAYPAL_REQUEST_TYPE_VOID_ORDER      = 'paymill-api-void_oder';
+    const PAYMILLL_REQUEST_TYPE_CREATE = 'paymill-api-create';
 
     /**
      * Error codes
      */
-    const PAYPAL_ERROR_GENERAL_ERROR        = 'general_error';
-    const PAYPAL_ERROR_ORDER_NOT_APPROVED   = 'order_not_approved';
-    const PAYPAL_ERROR_ORDER_NOT_AUTHORIZED = 'order_not_authorized';
-    const PAYPAL_ERROR_ORDER_NOT_CAPTURED   = 'order_not_captured';
+    const PAYMILL_ERROR_GENERAL_ERROR      = 'general_error';
+    const PAYMILL_ERROR_TRANSACTION_FAILED = 'transaction_failed';
 
     /**
-     * PayPal PHP REST Client (v2)
+     * PAYMILL PHP REST Client (v2)
      *
-     * @var PaymillClient
+     * @var PaymillRequest
      */
-    protected $PaymillClient = null;
+    protected $PaymillRequest = null;
+
+    /**
+     * The Order the payment is processed for
+     *
+     * @var null
+     */
+    protected $Order = null;
+
+    /**
+     * Payment constructor.
+     *
+     * @param AbstractOrder $Order (optional) - The Order the payment is processed for
+     * @return void
+     */
+    public function __construct(AbstractOrder $Order = null)
+    {
+        $this->Order = $Order;
+    }
 
     /**
      * @return string
@@ -103,14 +107,14 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
             $Order = OrderHandler::getInstance()->getOrderByHash($hash);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                'PayPal :: Cannot check if payment process for Order #' . $hash . ' is successful'
+                'PAYMILL :: Cannot check if payment process for Order #' . $hash . ' is successful'
                 . ' -> ' . $Exception->getMessage()
             );
 
             return false;
         }
 
-        return $Order->getPaymentDataEntry(self::ATTR_PAYPAL_PAYMENT_SUCCESSFUL);
+        return $Order->getPaymentDataEntry(self::ATTR_PAYMILL_ORDER_SUCCESSFUL);
     }
 
     /**
@@ -170,97 +174,166 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     }
 
     /**
-     * Save Order with SystemUser
+     * Execute payment
      *
-     * @param AbstractOrder $Order
+     * @param string $paymillToken - Unique PAYMILL Token for an authorized transaction
+     * @return void
+     *
+     * @throws PaymillException
+     * @throws QUI\ERP\Exception
+     * @throws QUI\Exception
+     */
+    public function checkout($paymillToken)
+    {
+        $this->addOrderHistoryEntry('Creating payment transaction');
+
+        $Transaction      = new PaymillTransactionRequest();
+        $PriceCalculation = $this->Order->getPriceCalculation();
+        $amount           = $PriceCalculation->getSum()->precision(2)->get();
+        $amount           *= 100; // convert to smallest currency unit
+
+        $Transaction->setAmount($amount);
+        $Transaction->setCurrency($this->Order->getCurrency()->getCode());
+        $Transaction->setToken($paymillToken);
+        $Transaction->setDescription(
+            $this->getLocale()->get(
+                'quiqqer/payment-paymill',
+                'Payment.order.description', [
+                    'orderId' => $this->Order->getId()
+                ]
+            )
+        );
+
+        /** @var Transaction $Response */
+        $Response = $this->paymillApiRequest(self::PAYMILLL_REQUEST_TYPE_CREATE, $Transaction);
+
+        // save PAYMILL Transaction ID to Order
+        $this->Order->setPaymentData(self::ATTR_PAYMILL_TRANSACTION_ID, $Response->getId());
+
+        if ($Response->getStatus() !== 'closed') {
+            $this->addOrderHistoryEntry(
+                'Transaction failed. Status: "' . $Response->getStatus() . '"'
+                . '" | Response Code: "' . $Response->getResponseCode() . '"'
+            );
+
+            // @todo Order pending status
+            // @todo mark order as problematic?
+
+            $this->saveOrder();
+            $this->throwPaymillException(self::PAYMILL_ERROR_TRANSACTION_FAILED);
+        }
+
+        $this->addOrderHistoryEntry('Transaction successful');
+        $this->Order->setSuccessfulStatus();
+
+        $capturedAmount   = $Response->getAmount();
+        $capturedCurrency = $Response->getCurrency();
+
+        // Create purchase
+        $this->addOrderHistoryEntry('Set Gateway purchase');
+
+        Gateway::getInstance()->purchase(
+            $capturedAmount / 100,
+            new QUI\ERP\Currency\Currency($capturedCurrency),
+            $this->Order,
+            $this
+        );
+
+        $this->Order->setPaymentData(self::ATTR_PAYMILL_ORDER_SUCCESSFUL, true);
+        $this->addOrderHistoryEntry('Gateway purchase completed and Order payment finished');
+
+        $this->saveOrder();
+    }
+
+    /**
+     * Add history entry for current Order
+     *
+     * @param string $msg
      * @return void
      */
-    protected function saveOrder(AbstractOrder $Order)
+    protected function addOrderHistoryEntry($msg)
     {
-        $Order->update(QUI::getUsers()->getSystemUser());
+        $this->Order->addHistory('PAYMILL :: ' . $msg);
     }
 
     /**
-     * Make a PayPal REST API request
+     * Save Order with SystemUser
      *
-     * @param string $request - Request type (see self::PAYPAL_REQUEST_TYPE_*)
-     * @param array $body - Request data
-     * @param AbstractOrder $Order - The QUIQQER ERP Order the request is intended for
-     * ($Order has to have the required paymentData attributes for the given $request value!)
-     * @return array|false - Response body or false on error
-     *
-     * @throws PayPalException
+     * @return void
      */
-    protected function payPalApiRequest($request, $body, AbstractOrder $Order)
+    protected function saveOrder()
     {
-        switch ($request) {
-            case self::PAYPAL_REQUEST_TYPE_CREATE_ORDER:
-                $Request = new PaymentCreateRequest();
-                break;
+        $this->Order->update(QUI::getUsers()->getSystemUser());
+    }
 
-            case self::PAYPAL_REQUEST_TYPE_EXECUTE_ORDER:
-                $Request = new PaymentExecuteRequest(
-                    $Order->getPaymentDataEntry(self::ATTR_PAYPAL_PAYMENT_ID)
-                );
-                break;
-
-            case self::PAYPAL_REQUEST_TYPE_AUTHORIZE_ORDER:
-                $Request = new OrderAuthorizeRequest(
-                    $Order->getPaymentDataEntry(self::ATTR_PAYPAL_ORDER_ID)
-                );
-                break;
-
-            case self::PAYPAL_REQUEST_TYPE_CAPTURE_ORDER:
-                $Request = new OrderCaptureRequest(
-                    $Order->getPaymentDataEntry(self::ATTR_PAYPAL_ORDER_ID)
-                );
-                break;
-
-            case self::PAYPAL_REQUEST_TYPE_VOID_ORDER:
-                $Request = new OrderVoidRequest(
-                    $Order->getPaymentDataEntry(self::ATTR_PAYPAL_ORDER_ID)
-                );
-                break;
-
-            default:
-                $this->throwPayPalException();
-        }
-
-        $Request->body = $body;
+    /**
+     * Make a PAYMILL REST API request
+     *
+     * @param string $requestType - Request type (see self::PAYMILL_REQUEST_TYPE_*)
+     * @param PaymillBaseRequest $RequestData - Request type with filled data
+     * @return PaymillBaseResponse
+     *
+     * @throws PaymillException
+     */
+    protected function paymillApiRequest($requestType, $RequestData)
+    {
+        $Request = $this->getPaymillRequest();
 
         try {
-            $Response = $this->getPaymillClient()->execute($Request);
+            switch ($requestType) {
+                case self::PAYMILLL_REQUEST_TYPE_CREATE:
+                    return $Request->create($RequestData);
+                    break;
+            }
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-            $this->throwPayPalException();
+
+            $this->addOrderHistoryEntry(
+                'API ERROR -> "' . $Exception->getMessage() . '"'
+                . ' | Check error log for further details.'
+            );
+
+            $this->saveOrder();
+            $this->throwPaymillException();
         }
 
-        // turn stdClass object to array
-        return json_decode(json_encode($Response->result), true);
+        $this->throwPaymillException();
     }
 
     /**
-     * Get PayPal Client for current payment process
+     * Throw PAYMILLException for specific PAYMILL API Error
      *
-     * @return PaymillClient
+     * @param string $errorCode (optional) - default: general error message
+     * @param array $exceptionAttributes (optional) - Additional Exception attributes that may be relevant for the Frontend
+     * @return string
+     *
+     * @throws PaymillException
      */
-    protected function getPaymillClient()
+    protected function throwPaymillException($errorCode = self::PAYMILL_ERROR_GENERAL_ERROR, $exceptionAttributes = [])
     {
-        if (!is_null($this->PaymillClient)) {
-            return $this->PaymillClient;
+        $L   = $this->getLocale();
+        $lg  = 'quiqqer/payment-paymill';
+        $msg = $L->get($lg, 'payment.error_msg.' . $errorCode);
+
+        $Exception = new PaymillException($msg);
+        $Exception->setAttributes($exceptionAttributes);
+
+        throw $Exception;
+    }
+
+    /**
+     * Get PAYMILL Client for current payment process
+     *
+     * @return PaymillRequest
+     */
+    protected function getPaymillRequest()
+    {
+        if (!is_null($this->PaymillRequest)) {
+            return $this->PaymillRequest;
         }
 
-        $clientId     = Provider::getApiSetting('client_id');
-        $clientSecret = Provider::getApiSetting('client_secret');
+        $this->PaymillRequest = new PaymillRequest(Provider::getApiSetting('private_key'));
 
-        if (Provider::getApiSetting('sandbox')) {
-            $Environment = new SandboxEnvironment($clientId, $clientSecret);
-        } else {
-            $Environment = new ProductionEnvironment($clientId, $clientSecret);
-        }
-
-        $this->PaymillClient = new PaymillClient($Environment);
-
-        return $this->PaymillClient;
+        return $this->PaymillRequest;
     }
 }
