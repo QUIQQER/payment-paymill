@@ -301,7 +301,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     }
 
     /**
-     * Throw PAYMILLException for specific PAYMILL API Error
+     * Throw PaymillException for specific PAYMILL API Error
      *
      * @param string $errorCode (optional) - default: general error message
      * @param array $exceptionAttributes (optional) - Additional Exception attributes that may be relevant for the Frontend
