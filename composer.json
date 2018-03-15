@@ -2,7 +2,7 @@
   "name": "quiqqer/payment-paymill",
   "type": "quiqqer-module",
   "description": "Paymill - Payment method for QUIQQER ERP stack",
-  "version": "dev-master",
+  "version": "1.0.0",
   "license": [
     "GPL-3.0+",
     "PCSG QL-1.0"
