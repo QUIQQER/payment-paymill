@@ -47,28 +47,28 @@
 
         <!-- PaymentDisplay -->
         <locale name="PaymentDisplay.configuration_error">
-            <de><![CDATA[Die Zahlung mit PAYMILL kann zur Zeit leider nicht durchgeführt werden. Bitte wählen Sie eine andere Zahlungsweise.]]></de>
-            <en><![CDATA[Unfortunately, PAYMILL payment can not be used at the moment. Please choose a different method of payment.]]></en>
+            <de><![CDATA[Die Zahlung mit Kreditkarte kann zur Zeit leider nicht durchgeführt werden. Bitte wählen Sie eine andere Zahlungsweise.]]></de>
+            <en><![CDATA[Unfortunately, credit card payment can not be used at the moment. Please choose a different method of payment.]]></en>
         </locale>
         <locale name="PaymentDisplay.no_javascript">
-            <de><![CDATA[In Ihrem Browser ist JavaScript deaktiviert. Um Zahlungen mit PAYMILL durchzuführen, aktivieren Sie bitte JavaScript.]]></de>
-            <en><![CDATA[JavaScript is deactivated in your browser. To make payments using PAYMILL, please enable JavaScript.]]></en>
+            <de><![CDATA[In Ihrem Browser ist JavaScript deaktiviert. Um Zahlungen mit Ihrer Kreditkarte durchzuführen, aktivieren Sie bitte JavaScript.]]></de>
+            <en><![CDATA[JavaScript is deactivated in your browser. To make payments using your credit card, please enable JavaScript.]]></en>
         </locale>
         <locale name="PaymentDisplay.header.title">
-            <de><![CDATA[Bezahlung mit PAYMILL]]></de>
-            <en><![CDATA[Payment with PAYMILL]]></en>
+            <de><![CDATA[Bezahlung mit Kreditkarte]]></de>
+            <en><![CDATA[Payment with credit card]]></en>
         </locale>
         <locale name="payment.step.title">
-            <de><![CDATA[Bezahlung mit PAYMILL]]></de>
-            <en><![CDATA[Payment with PAYMILL]]></en>
+            <de><![CDATA[Bezahlung mit Kreditkarte]]></de>
+            <en><![CDATA[Payment with credit card]]></en>
         </locale>
         <locale name="payment.error_msg.general_error">
-            <de><![CDATA[Beim Bezahlungsvorgang mit PAYMILL ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
-            <en><![CDATA[An error occurred while paying with PAYMILL. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
+            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
         <locale name="payment.error_msg.transaction_failed">
-            <de><![CDATA[Beim Bezahlungsvorgang mit PAYMILL ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
-            <en><![CDATA[An error occurred while paying with PAYMILL. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
+            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
 
     </groups>
@@ -87,8 +87,8 @@
 
         <!-- Control: PaymentDisplay -->
         <locale name="PaymentDisplay.info">
-            <de><![CDATA[Bitte geben Sie Ihre Kreditkarten-Daten im sicheren PAYMILL-Formular an, um mit der Bezahlung fortzufahren.]]></de>
-            <en><![CDATA[Please provide your credit card data in the secure PAYMILL form to continue the payment process.]]></en>
+            <de><![CDATA[Bitte geben Sie Ihre Kreditkarten-Daten im sicheren Formular an, um mit der Bezahlung fortzufahren.]]></de>
+            <en><![CDATA[Please provide your credit card data in the secure form to continue the payment process.]]></en>
         </locale>
         <locale name="PaymentDisplay.btn_pay.text" html="true">
             <de><![CDATA[Jetzt <b>[display_price]</b> bezahlen]]></de>
@@ -96,11 +96,11 @@
         </locale>
         <locale name="PaymentDisplay.btn_pay.title" html="true">
             <de><![CDATA[Hier klicken, um ihre Bestellung im Wert von [display_price] mit ihrer Kreditkarte zu bezahlen]]></de>
-            <en><![CDATA[Click here to pay your order with a value of [display_price with your credit card]]></en>
+            <en><![CDATA[Click here to pay your order with a value of [display_price] with your credit card]]></en>
         </locale>
         <locale name="PaymentDisplay.checkout_process">
-            <de><![CDATA[Zahlung mit PAYMILL wird durchgeführt]]></de>
-            <en><![CDATA[Payment with PAYMILL is being processed]]></en>
+            <de><![CDATA[Zahlung mit Kreditkarte wird durchgeführt]]></de>
+            <en><![CDATA[Credit card payment is being processed]]></en>
         </locale>
 
     </groups>
