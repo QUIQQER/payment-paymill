@@ -44,6 +44,10 @@ class PaymentDisplay extends QUI\Control
         $Order            = $this->getAttribute('Order');
         $PriceCalculation = $Order->getPriceCalculation();
 
+        if (Provider::isApiSetUp() === false) {
+            $this->Events->fireEvent('processingError', [$this]);
+        }
+
         $Engine->assign([
             'display_price' => $PriceCalculation->getSum()->formatted(),
             'apiSetUp'      => Provider::isApiSetUp()
