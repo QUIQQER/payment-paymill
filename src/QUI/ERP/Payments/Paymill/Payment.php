@@ -28,7 +28,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     /**
      * PAYMILL API Order attributes
      */
-    const ATTR_PAYMILL_TRANSACTION_ID   = 'paymill-TransactionId';
+    const ATTR_PAYMILL_TRANSACTION_ID = 'paymill-TransactionId';
     const ATTR_PAYMILL_ORDER_SUCCESSFUL = 'paymill-OrderSuccessful';
 
     /**
@@ -39,7 +39,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     /**
      * Error codes
      */
-    const PAYMILL_ERROR_GENERAL_ERROR      = 'general_error';
+    const PAYMILL_ERROR_GENERAL_ERROR = 'general_error';
     const PAYMILL_ERROR_TRANSACTION_FAILED = 'transaction_failed';
 
     /**
@@ -91,7 +91,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      */
     public function getIcon()
     {
-        return URL_OPT_DIR . 'quiqqer/payment-paymill/bin/images/Payment.jpg';
+        return URL_OPT_DIR.'quiqqer/payment-paymill/bin/images/Payment.jpg';
     }
 
     /**
@@ -107,8 +107,8 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
             $Order = OrderHandler::getInstance()->getOrderByHash($hash);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                'PAYMILL :: Cannot check if payment process for Order #' . $hash . ' is successful'
-                . ' -> ' . $Exception->getMessage()
+                'PAYMILL :: Cannot check if payment process for Order #'.$hash.' is successful'
+                .' -> '.$Exception->getMessage()
             );
 
             return false;
@@ -168,7 +168,10 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         );
 
         $Engine = QUI::getTemplateManager()->getEngine();
-        $Step->setContent($Engine->fetch(dirname(__FILE__) . '/PaymentDisplay.Header.html'));
+
+        $Step->setContent(
+            $Engine->fetch(dirname(__FILE__).'/PaymentDisplay.Header.html')
+        );
 
         return $Control->create();
     }
@@ -198,9 +201,8 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $Transaction->setDescription(
             $this->getLocale()->get(
                 'quiqqer/payment-paymill',
-                'Payment.order.description', [
-                    'orderId' => $this->Order->getId()
-                ]
+                'Payment.order.description',
+                ['orderId' => $this->Order->getId()]
             )
         );
 
@@ -212,8 +214,8 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
 
         if ($Response->getStatus() !== 'closed') {
             $this->addOrderHistoryEntry(
-                'Transaction failed. Status: "' . $Response->getStatus() . '"'
-                . '" | Response Code: "' . $Response->getResponseCode() . '"'
+                'Transaction failed. Status: "'.$Response->getStatus().'"'
+                .'" | Response Code: "'.$Response->getResponseCode().'"'
             );
 
             // @todo Order pending status
@@ -253,7 +255,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      */
     protected function addOrderHistoryEntry($msg)
     {
-        $this->Order->addHistory('PAYMILL :: ' . $msg);
+        $this->Order->addHistory('PAYMILL :: '.$msg);
     }
 
     /**
@@ -289,8 +291,8 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
             QUI\System\Log::writeException($Exception);
 
             $this->addOrderHistoryEntry(
-                'API ERROR -> "' . $Exception->getMessage() . '"'
-                . ' | Check error log for further details.'
+                'API ERROR -> "'.$Exception->getMessage().'"'
+                .' | Check error log for further details.'
             );
 
             $this->saveOrder();
@@ -313,7 +315,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     {
         $L   = $this->getLocale();
         $lg  = 'quiqqer/payment-paymill';
-        $msg = $L->get($lg, 'payment.error_msg.' . $errorCode);
+        $msg = $L->get($lg, 'payment.error_msg.'.$errorCode);
 
         $Exception = new PaymillException($msg);
         $Exception->setAttributes($exceptionAttributes);

@@ -7,7 +7,6 @@
 namespace QUI\ERP\Payments\Paymill;
 
 use QUI;
-use QUI\ERP\Order\Handler as OrderHandler;
 
 /**
  * Class PaymentDisplay
@@ -20,13 +19,22 @@ class PaymentDisplay extends QUI\Control
      * Constructor
      *
      * @param array $attributes
+     *
+     * @throws QUI\ERP\Order\ProcessingException
      */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/PaymentDisplay.css');
+        $this->addCSSFile(dirname(__FILE__).'/PaymentDisplay.css');
         $this->setJavaScriptControl('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay');
+
+        if (Provider::isApiSetUp() === false) {
+            throw new QUI\ERP\Order\ProcessingException([
+                'quiqqer/payment-paymill',
+                'exception.message.missing.setup'
+            ]);
+        }
     }
 
     /**
@@ -44,10 +52,6 @@ class PaymentDisplay extends QUI\Control
         $Order            = $this->getAttribute('Order');
         $PriceCalculation = $Order->getPriceCalculation();
 
-        if (Provider::isApiSetUp() === false) {
-            $this->Events->fireEvent('processingError', [$this]);
-        }
-
         $Engine->assign([
             'display_price' => $PriceCalculation->getSum()->formatted(),
             'apiSetUp'      => Provider::isApiSetUp()
@@ -61,6 +65,6 @@ class PaymentDisplay extends QUI\Control
         $this->setJavaScriptControlOption('currency', $Order->getCurrency()->getCode());
         $this->setJavaScriptControlOption('displaylang', QUI::getLocale()->getCurrent());
 
-        return $Engine->fetch(dirname(__FILE__) . '/PaymentDisplay.html');
+        return $Engine->fetch(dirname(__FILE__).'/PaymentDisplay.html');
     }
 }

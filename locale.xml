@@ -81,6 +81,16 @@
             <en><![CDATA[Order #[orderId]]]></en>
         </locale>
 
+        <locale name="exception.message.missing.setup">
+            <de><![CDATA[
+            Bezahlung per Kreditkarte kann zur Zeit nicht verwendet werden.
+            Bitte wenden Sie sich an den Shopbetreiber und / oder wählen eine andere Bezahlmethode.
+            ]]></de>
+            <en><![CDATA[
+            Payment by credit card cannot be used at the moment.
+            Please contact the shop owner and / or choose another payment method.
+            ]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/payment-paymill" datatype="js">
