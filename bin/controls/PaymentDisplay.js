@@ -65,6 +65,12 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
             var self = this;
             var Elm  = this.getElm();
 
+            if (Elm.getElement('.message-error')) {
+                (function () {
+                    self.fireEvent('processingError', [self]);
+                }).delay(2000);
+            }
+
             if (!Elm.getElement('.quiqqer-payment-paymill-content')) {
                 return;
             }
@@ -171,6 +177,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                             }, function (Error) {
                                 checkoutLoaderHide();
                                 self.$showErrorMsg(Error.getMessage());
+                                self.fireEvent('processingError', [self]);
                             });
                         }, function () {
                             checkoutLoaderHide();
@@ -188,6 +195,8 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                             'payment.error_msg.general_error'
                         )
                     );
+
+                    self.fireEvent('processingError', [self]);
                     return;
                 }
 
@@ -210,6 +219,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                 }, function (Error, Result) {
                     if (Error) {
                         reject(Error);
+                        self.fireEvent('processingError', [self]);
                     } else {
                         resolve(Result.token);
                     }
