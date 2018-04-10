@@ -38,6 +38,7 @@ class Provider extends AbstractPaymentProvider
             $Conf = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return false;
         }
 
@@ -56,6 +57,7 @@ class Provider extends AbstractPaymentProvider
             $Conf = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return false;
         }
 
@@ -74,6 +76,7 @@ class Provider extends AbstractPaymentProvider
             $Conf = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return false;
         }
 
@@ -84,20 +87,23 @@ class Provider extends AbstractPaymentProvider
      * Check if the Paymill API settings are correct
      *
      * @return bool
-     * @throws QUI\Exception
      */
     public static function isApiSetUp()
     {
-        $Conf        = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
-        $apiSettings = $Conf->getSection('api');
+        try {
+            $Conf        = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
+            $apiSettings = $Conf->getSection('api');
+        } catch (QUI\Exception $Exception) {
+            return false;
+        }
 
         foreach ($apiSettings as $k => $v) {
             if (empty($v)) {
                 QUI\System\Log::addError(
                     'Your Paymill API credentials seem to be (partially) missing.'
-                    . ' Paymill CAN NOT be used at the moment. Please enter all your'
-                    . ' API credentials. See https://dev.quiqqer.com/quiqqer/payment-paymill/wikis/api-configuration'
-                    . ' for further instructions.'
+                    .' Paymill CAN NOT be used at the moment. Please enter all your'
+                    .' API credentials. See https://dev.quiqqer.com/quiqqer/payment-paymill/wikis/api-configuration'
+                    .' for further instructions.'
                 );
 
                 return false;
