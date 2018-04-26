@@ -219,7 +219,6 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                 }, function (Error, Result) {
                     if (Error) {
                         reject(Error);
-                        self.fireEvent('processingError', [self]);
                     } else {
                         resolve(Result.token);
                     }
