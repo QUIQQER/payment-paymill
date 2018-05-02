@@ -15,8 +15,6 @@ use QUI\ERP\Accounting\Payments\Gateway\Gateway;
 use QUI;
 use QUI\ERP\Order\AbstractOrder;
 use QUI\ERP\Order\Handler as OrderHandler;
-use QUI\ERP\Utils\User as ERPUserUtils;
-use QUI\ERP\Accounting\CalculationValue;
 
 /**
  * Class Payment
@@ -195,6 +193,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $amount           = $PriceCalculation->getSum()->precision(2)->get();
         $amount           *= 100; // convert to smallest currency unit
 
+        $Transaction->setId($this->Order->getHash());
         $Transaction->setAmount($amount);
         $Transaction->setCurrency($this->Order->getCurrency()->getCode());
         $Transaction->setToken($paymillToken);
@@ -202,7 +201,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
             $this->getLocale()->get(
                 'quiqqer/payment-paymill',
                 'Payment.order.description',
-                ['orderId' => $this->Order->getId()]
+                ['orderId' => $this->Order->getPrefixedId()]
             )
         );
 
