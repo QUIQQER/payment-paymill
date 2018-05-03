@@ -112,6 +112,12 @@
             <de><![CDATA[Zahlung mit Kreditkarte wird durchgeführt]]></de>
             <en><![CDATA[Credit card payment is being processed]]></en>
         </locale>
+        
+        <!-- Order history -->
+        <locale name="history.transaction_id">
+            <de><![CDATA[PAYMILL Transaktions-ID: [transactionId]]]></de>
+            <en><![CDATA[PAYMILL Transaction ID: [transactionId]]]></en>
+        </locale>
 
     </groups>
 </locales>

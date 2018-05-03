@@ -26,7 +26,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     /**
      * PAYMILL API Order attributes
      */
-    const ATTR_PAYMILL_TRANSACTION_ID = 'paymill-TransactionId';
+    const ATTR_PAYMILL_TRANSACTION_ID   = 'paymill-TransactionId';
     const ATTR_PAYMILL_ORDER_SUCCESSFUL = 'paymill-OrderSuccessful';
 
     /**
@@ -37,7 +37,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     /**
      * Error codes
      */
-    const PAYMILL_ERROR_GENERAL_ERROR = 'general_error';
+    const PAYMILL_ERROR_GENERAL_ERROR      = 'general_error';
     const PAYMILL_ERROR_TRANSACTION_FAILED = 'transaction_failed';
 
     /**
@@ -193,7 +193,6 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $amount           = $PriceCalculation->getSum()->precision(2)->get();
         $amount           *= 100; // convert to smallest currency unit
 
-        $Transaction->setId($this->Order->getHash());
         $Transaction->setAmount($amount);
         $Transaction->setCurrency($this->Order->getCurrency()->getCode());
         $Transaction->setToken($paymillToken);
@@ -210,6 +209,15 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
 
         // save PAYMILL Transaction ID to Order
         $this->Order->setPaymentData(self::ATTR_PAYMILL_TRANSACTION_ID, $Response->getId());
+        $this->Order->addHistory(
+            QUI::getLocale()->get(
+                'quiqqer/payment-paymill',
+                'history.transaction_id',
+                [
+                    'transactionId' => $Response->getId()
+                ]
+            )
+        );
 
         if ($Response->getStatus() !== 'closed') {
             $this->addOrderHistoryEntry(
