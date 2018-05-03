@@ -44,6 +44,28 @@
             <de><![CDATA[Den "Private Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die PAYMILL-Integration Ihres Shops zu testen.]]></de>
             <en><![CDATA[You can find the "Private Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the PAYMILL integration of your shop.]]></en>
         </locale>
+        <locale name="settings.category.payment.title">
+            <de><![CDATA[Zahlungsvorgang]]></de>
+            <en><![CDATA[Payment process]]></en>
+        </locale>
+        <locale name="settings.payment.title">
+            <de><![CDATA[Zahlungsvorgang]]></de>
+            <en><![CDATA[Payment process]]></en>
+        </locale>
+        <locale name="settings.payment.paymill_transaction_description.title">
+            <de><![CDATA[Transaktions-Beschreibung für Bestellungen]]></de>
+            <en><![CDATA[Transaction description for orders]]></en>
+        </locale>
+        <locale name="settings.payment.paymill_transaction_description.description">
+            <de><![CDATA[Hier legen Sie fest, welcher <b>Beschreibungstext</b> in der Transaktionsübersicht bei ihrem <b>Händlerkonto bei PAYMILL</b> und auf der <b>Kreditkartenabrechnung</b> beim Kunden für eine Bestellung angezeigt wird.<br><br>Verfügbare Platzhalter:
+<ul>
+<li><b>{orderId}</b> - Bestellnummer (mit Präfix)</li>
+</ul>]]></de>
+            <en><![CDATA[Here you specify the <b>description text</b> that appears in the transaction overview in your <b>merchant account at PAYMILL</b> and on the customers <b>credit card statement</b> for an order.<br><br>Available placeholders:
+<ul>
+<li><b>{orderId}</b> - Order number (with prefix)</li>
+</ul>]]></en>
+        </locale>
 
         <!-- PaymentDisplay -->
         <locale name="PaymentDisplay.configuration_error">
@@ -90,6 +112,11 @@
             Payment by credit card cannot be used at the moment.
             Please contact the shop owner and / or choose another payment method.
             ]]></en>
+        </locale>
+        
+        <locale name="Payment.default_transaction_description">
+            <de><![CDATA[Ihre Bestellung bei [url]: [orderId]]]></de>
+            <en><![CDATA[Your order at [url]: [orderId]]]></en>
         </locale>
     </groups>
 

@@ -13,6 +13,12 @@
                 </conf>
             </section>
 
+            <section name="payment">
+                <conf name="paymill_transaction_description">
+                    <type><![CDATA[string]]></type>
+                </conf>
+            </section>
+
         </config>
 
         <window>
@@ -50,6 +56,28 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/payment-paymill" var="settings.api.public_key.description"/>
+                            </description>
+                        </input>
+
+                    </settings>
+                </category>
+
+                <category name="payment">
+                    <icon>fa fa-credit-card</icon>
+                    <title>
+                        <locale group="quiqqer/payment-paymill" var="settings.category.payment.title"/>
+                    </title>
+                    <settings title="payment" name="payment">
+                        <title>
+                            <locale group="quiqqer/payment-paymill" var="settings.payment.title"/>
+                        </title>
+
+                        <input conf="payment.paymill_transaction_description" type="text" data-qui="controls/lang/InputMultiLang">
+                            <text>
+                                <locale group="quiqqer/payment-paymill" var="settings.payment.paymill_transaction_description.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/payment-paymill" var="settings.payment.paymill_transaction_description.description"/>
                             </description>
                         </input>
 

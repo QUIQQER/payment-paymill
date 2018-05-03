@@ -196,13 +196,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $Transaction->setAmount($amount);
         $Transaction->setCurrency($this->Order->getCurrency()->getCode());
         $Transaction->setToken($paymillToken);
-        $Transaction->setDescription(
-            $this->getLocale()->get(
-                'quiqqer/payment-paymill',
-                'Payment.order.description',
-                ['orderId' => $this->Order->getPrefixedId()]
-            )
-        );
+        $Transaction->setDescription($this->getTransactionDescription());
 
         /** @var Transaction $Response */
         $Response = $this->paymillApiRequest(self::PAYMILLL_REQUEST_TYPE_CREATE, $Transaction);
@@ -252,6 +246,46 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $this->addOrderHistoryEntry('Gateway purchase completed and Order payment finished');
 
         $this->saveOrder();
+    }
+
+    /**
+     * Get transaction description
+     *
+     * This description can be seen in the merchant account at PAYMILL
+     * and the credit card statement of the buyer for an order
+     *
+     * @return string
+     * @throws QUI\Exception
+     */
+    protected function getTransactionDescription()
+    {
+        $Conf        = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
+        $description = $Conf->get('payment', 'paymill_transaction_description');
+
+        if (empty($description)) {
+            $description = [];
+        } else {
+            $description = json_decode($description, true);
+        }
+
+        $lang            = $this->Order->getCustomer()->getLang();
+        $descriptionText = '';
+
+        if (!empty($description[$lang])) {
+            $descriptionText = str_replace(['{orderId}'], [$this->Order->getPrefixedId()], $description[$lang]);
+        }
+
+        if (empty($descriptionText)) {
+            $descriptionText = QUI::getLocale()->get(
+                'quiqqer/payment-paymill',
+                'Payment.default_transaction_description', [
+                    'url'     => QUI::conf('globals', 'host'),
+                    'orderId' => $this->Order->getPrefixedId()
+                ]
+            );
+        }
+
+        return $descriptionText;
     }
 
     /**
