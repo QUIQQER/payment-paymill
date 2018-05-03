@@ -276,7 +276,10 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         }
 
         if (empty($descriptionText)) {
-            $descriptionText = QUI::getLocale()->get(
+            $L = new QUI\Locale();
+            $L->setCurrent($lang);
+
+            $descriptionText = $L->get(
                 'quiqqer/payment-paymill',
                 'Payment.default_transaction_description', [
                     'url'     => QUI::conf('globals', 'host'),
