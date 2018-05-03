@@ -26,7 +26,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     /**
      * PAYMILL API Order attributes
      */
-    const ATTR_PAYMILL_TRANSACTION_ID = 'paymill-TransactionId';
+    const ATTR_PAYMILL_TRANSACTION_ID   = 'paymill-TransactionId';
     const ATTR_PAYMILL_ORDER_SUCCESSFUL = 'paymill-OrderSuccessful';
 
     /**
@@ -37,7 +37,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     /**
      * Error codes
      */
-    const PAYMILL_ERROR_GENERAL_ERROR = 'general_error';
+    const PAYMILL_ERROR_GENERAL_ERROR      = 'general_error';
     const PAYMILL_ERROR_TRANSACTION_FAILED = 'transaction_failed';
 
     /**
@@ -193,23 +193,25 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $amount           = $PriceCalculation->getSum()->precision(2)->get();
         $amount           *= 100; // convert to smallest currency unit
 
-        $Transaction->setId($this->Order->getHash());
         $Transaction->setAmount($amount);
         $Transaction->setCurrency($this->Order->getCurrency()->getCode());
         $Transaction->setToken($paymillToken);
-        $Transaction->setDescription(
-            $this->getLocale()->get(
-                'quiqqer/payment-paymill',
-                'Payment.order.description',
-                ['orderId' => $this->Order->getPrefixedId()]
-            )
-        );
+        $Transaction->setDescription($this->getTransactionDescription());
 
         /** @var Transaction $Response */
         $Response = $this->paymillApiRequest(self::PAYMILLL_REQUEST_TYPE_CREATE, $Transaction);
 
         // save PAYMILL Transaction ID to Order
         $this->Order->setPaymentData(self::ATTR_PAYMILL_TRANSACTION_ID, $Response->getId());
+        $this->Order->addHistory(
+            QUI::getLocale()->get(
+                'quiqqer/payment-paymill',
+                'history.transaction_id',
+                [
+                    'transactionId' => $Response->getId()
+                ]
+            )
+        );
 
         if ($Response->getStatus() !== 'closed') {
             $this->addOrderHistoryEntry(
@@ -244,6 +246,49 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $this->addOrderHistoryEntry('Gateway purchase completed and Order payment finished');
 
         $this->saveOrder();
+    }
+
+    /**
+     * Get transaction description
+     *
+     * This description can be seen in the merchant account at PAYMILL
+     * and the credit card statement of the buyer for an order
+     *
+     * @return string
+     * @throws QUI\Exception
+     */
+    protected function getTransactionDescription()
+    {
+        $Conf        = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
+        $description = $Conf->get('payment', 'paymill_transaction_description');
+
+        if (empty($description)) {
+            $description = [];
+        } else {
+            $description = json_decode($description, true);
+        }
+
+        $lang            = $this->Order->getCustomer()->getLang();
+        $descriptionText = '';
+
+        if (!empty($description[$lang])) {
+            $descriptionText = str_replace(['{orderId}'], [$this->Order->getPrefixedId()], $description[$lang]);
+        }
+
+        if (empty($descriptionText)) {
+            $L = new QUI\Locale();
+            $L->setCurrent($lang);
+
+            $descriptionText = $L->get(
+                'quiqqer/payment-paymill',
+                'Payment.default_transaction_description', [
+                    'url'     => QUI::conf('globals', 'host'),
+                    'orderId' => $this->Order->getPrefixedId()
+                ]
+            );
+        }
+
+        return $descriptionText;
     }
 
     /**
