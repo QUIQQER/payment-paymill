@@ -226,7 +226,6 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         }
 
         $this->addOrderHistoryEntry('Transaction successful');
-        $this->Order->setSuccessfulStatus();
 
         $capturedAmount   = $Response->getAmount();
         $capturedCurrency = $Response->getCurrency();
@@ -234,17 +233,18 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         // Create purchase
         $this->addOrderHistoryEntry('Set Gateway purchase');
 
+        $this->Order->setPaymentData(self::ATTR_PAYMILL_ORDER_SUCCESSFUL, true);
+        $this->Order->setSuccessfulStatus();
+
+        $this->addOrderHistoryEntry('Gateway purchase completed and Order payment finished');
+        $this->saveOrder();
+
         Gateway::getInstance()->purchase(
             $capturedAmount / 100,
             new QUI\ERP\Currency\Currency($capturedCurrency),
             $this->Order,
             $this
         );
-
-        $this->Order->setPaymentData(self::ATTR_PAYMILL_ORDER_SUCCESSFUL, true);
-        $this->addOrderHistoryEntry('Gateway purchase completed and Order payment finished');
-
-        $this->saveOrder();
     }
 
     /**
