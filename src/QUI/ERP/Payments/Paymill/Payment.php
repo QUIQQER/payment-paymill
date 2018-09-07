@@ -137,9 +137,14 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      * Execute a refund
      *
      * @param QUI\ERP\Accounting\Payments\Transactions\Transaction $Transaction
+     * @param $amount
+     * @param string $message
      */
-    public function refund(QUI\ERP\Accounting\Payments\Transactions\Transaction $Transaction)
-    {
+    public function refund(
+        \QUI\ERP\Accounting\Payments\Transactions\Transaction $Transaction,
+        $amount,
+        $message = ''
+    ) {
         // @todo
     }
 
