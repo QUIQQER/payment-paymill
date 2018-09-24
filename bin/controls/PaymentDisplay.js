@@ -29,8 +29,8 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
         Binds: [
             '$onImport',
             '$showPaymillForm',
-            '$onPayPalLoginReady',
-            '$showPayPalWallet',
+            '$checkout',
+            '$getPaymillToken',
             '$showErrorMsg',
             '$onPayBtnClick'
         ],
