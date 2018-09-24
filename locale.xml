@@ -118,6 +118,14 @@
             <de><![CDATA[Ihre Bestellung bei [url]: [orderId]]]></de>
             <en><![CDATA[Your order at [url]: [orderId]]]></en>
         </locale>
+        <locale name="exception.Payment.refund_order_not_captured">
+            <de><![CDATA[Der Rückzahlungs-Vorgang bei PAYMILL konnte nicht durchgeführt werden, da die Bestellung auf Seite von PAYMILL noch nicht oder nicht vollständig bezahlt wurde.]]></de>
+            <en><![CDATA[The refund process with PAYMILL could not be completed because the order has not yet been partially or fully paid/captured on the PAYMILL side.]]></en>
+        </locale>
+        <locale name="exception.Payment.refund_error">
+            <de><![CDATA[Die Rückzahlung mit PAYMILL konnte nicht erfolgreich durchgeführt werden. Bitte überprüfen Sie die Transaktions-Logs.]]></de>
+            <en><![CDATA[The refund with PAYMILL could not be successfully completed. Please check the transaction logs.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/payment-paymill" datatype="js">

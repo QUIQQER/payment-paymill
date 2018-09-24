@@ -11,10 +11,13 @@ use Paymill\Request as PaymillRequest;
 use Paymill\Models\Request\Base as PaymillBaseRequest;
 use Paymill\Models\Response\Base as PaymillBaseResponse;
 use Paymill\Models\Request\Transaction as PaymillTransactionRequest;
+use Paymill\Models\Request\Refund as PaymillRefundRequest;
 use QUI\ERP\Accounting\Payments\Gateway\Gateway;
 use QUI;
 use QUI\ERP\Order\AbstractOrder;
 use QUI\ERP\Order\Handler as OrderHandler;
+use QUI\ERP\Accounting\Payments\Transactions\Factory as TransactionFactory;
+use Paymill\Services\PaymillException as PaymillApiException;
 
 /**
  * Class Payment
@@ -27,6 +30,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      * PAYMILL API Order attributes
      */
     const ATTR_PAYMILL_TRANSACTION_ID   = 'paymill-TransactionId';
+    const ATTR_PAYMILL_REFUND_ID        = 'paymill-RefundId';
     const ATTR_PAYMILL_ORDER_SUCCESSFUL = 'paymill-OrderSuccessful';
 
     /**
@@ -39,6 +43,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      */
     const PAYMILL_ERROR_GENERAL_ERROR      = 'general_error';
     const PAYMILL_ERROR_TRANSACTION_FAILED = 'transaction_failed';
+    const PAYMILL_ERROR_REFUND_FAILED      = 'refund_failed';
 
     /**
      * PAYMILL PHP REST Client (v2)
@@ -140,6 +145,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      * @param int|float $amount
      * @param string $message
      * @param false|string $hash - if a new hash will be used
+     * @throws QUI\ERP\Accounting\Payments\Transactions\RefundException
      */
     public function refund(
         \QUI\ERP\Accounting\Payments\Transactions\Transaction $Transaction,
@@ -147,7 +153,27 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $message = '',
         $hash = false
     ) {
-        // @todo
+        try {
+            if ($hash === false) {
+                $hash = $Transaction->getHash();
+            }
+
+            $this->executeRefund($Transaction, $hash, $amount, $message);
+        } catch (PaymillException $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+
+            throw new QUI\ERP\Accounting\Payments\Transactions\RefundException([
+                'quiqqer/payment-paymill',
+                'exception.Payment.refund_error'
+            ]);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+
+            throw new QUI\ERP\Accounting\Payments\Transactions\RefundException([
+                'quiqqer/payment-paymill',
+                'exception.Payment.refund_error'
+            ]);
+        }
     }
 
     /**
@@ -194,6 +220,181 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     public function checkout($paymillToken)
     {
         $this->addOrderHistoryEntry('Creating payment transaction');
+
+        $Transaction      = new PaymillTransactionRequest();
+        $PriceCalculation = $this->Order->getPriceCalculation();
+        $amount           = $PriceCalculation->getSum()->precision(2)->get();
+        $amount           *= 100; // convert to smallest currency unit
+
+        $Transaction->setAmount($amount);
+        $Transaction->setCurrency($this->Order->getCurrency()->getCode());
+        $Transaction->setToken($paymillToken);
+        $Transaction->setDescription($this->getTransactionDescription());
+
+        /** @var Transaction $Response */
+        $Response = $this->paymillApiRequest(self::PAYMILLL_REQUEST_TYPE_CREATE, $Transaction);
+
+        // save PAYMILL Transaction ID to Order
+        $this->Order->setPaymentData(self::ATTR_PAYMILL_TRANSACTION_ID, $Response->getId());
+        $this->Order->addHistory(
+            QUI::getLocale()->get(
+                'quiqqer/payment-paymill',
+                'history.transaction_id',
+                [
+                    'transactionId' => $Response->getId()
+                ]
+            )
+        );
+
+        if ($Response->getStatus() !== 'closed') {
+            $this->addOrderHistoryEntry(
+                'Transaction failed. Status: "'.$Response->getStatus().'"'
+                .'" | Response Code: "'.$Response->getResponseCode().'"'
+            );
+
+            // @todo Order pending status
+            // @todo mark order as problematic?
+
+            $this->saveOrder();
+            $this->throwPaymillException(self::PAYMILL_ERROR_TRANSACTION_FAILED);
+        }
+
+        $this->addOrderHistoryEntry('Transaction successful');
+
+        $capturedAmount   = $Response->getAmount();
+        $capturedCurrency = $Response->getCurrency();
+
+        // Create purchase
+        $this->addOrderHistoryEntry('Set Gateway purchase');
+
+        $this->Order->setPaymentData(self::ATTR_PAYMILL_ORDER_SUCCESSFUL, true);
+        $this->Order->setSuccessfulStatus();
+
+        $this->addOrderHistoryEntry('Gateway purchase completed and Order payment finished');
+        $this->saveOrder();
+
+        $Transaction = Gateway::getInstance()->purchase(
+            $capturedAmount / 100,
+            new QUI\ERP\Currency\Currency($capturedCurrency),
+            $this->Order,
+            $this
+        );
+
+        $Transaction->setData(
+            self::ATTR_PAYMILL_TRANSACTION_ID,
+            $this->Order->getPaymentDataEntry(self::ATTR_PAYMILL_TRANSACTION_ID)
+        );
+
+        $Transaction->updateData();
+    }
+
+    /**
+     * Refund partial or full payment of an Order
+     *
+     * @param QUI\ERP\Accounting\Payments\Transactions\Transaction $Transaction
+     * @param string $refundHash - Hash of the refund Transaction
+     * @param float $amount - The amount to be refunden
+     * @param string $reason (optional) - The reason for the refund [default: none; max. 255 characters]
+     * @return void
+     *
+     * @throws PaymillException
+     * @throws QUI\Exception
+     */
+    public function executeRefund(
+        QUI\ERP\Accounting\Payments\Transactions\Transaction $Transaction,
+        $refundHash,
+        $amount,
+        $reason = ''
+    ) {
+        $Process = new QUI\ERP\Process($Transaction->getGlobalProcessId());
+        $Process->addHistory('PAYMILL :: Start refund for transaction #'.$Transaction->getTxId());
+
+        $paymillTransactionId = $Transaction->getData(self::ATTR_PAYMILL_TRANSACTION_ID);
+
+        if (empty($paymillTransactionId)) {
+            $Process->addHistory('PAYMILL :: Transaction cannot be refunded because it is not yet captured / completed');
+
+            throw new PaymillException([
+                'quiqqer/payment-paymill',
+                'exception.Payment.refund_order_not_captured'
+            ]);
+        }
+
+        // create a refund transaction
+        $RefundTransaction = TransactionFactory::createPaymentRefundTransaction(
+            $amount,
+            $Transaction->getCurrency(),
+            $refundHash,
+            $Transaction->getPayment()->getName(),
+            [
+                'isRefund' => 1,
+                'message'  => $reason
+            ],
+            null,
+            false,
+            $Transaction->getGlobalProcessId()
+        );
+
+        $RefundTransaction->pending();
+
+        // Execute refund with Paymill
+        $PaymillRefund = new PaymillRefundRequest();
+        $AmountValue   = new QUI\ERP\Accounting\CalculationValue($amount, $Transaction->getCurrency(), 2);
+        $refundAmount  = $AmountValue->get() * 100; // convert to smallest currency unit
+
+        $PaymillRefund->setAmount($refundAmount);
+        $PaymillRefund->setDescription($reason);
+        $PaymillRefund->setReason($PaymillRefund::REASON_KEY_REQUESTED_BY_CUSTOMER);
+        $PaymillRefund->setId($paymillTransactionId);
+
+        /** @var Transaction $Response */
+        try {
+            $Response = $this->paymillApiRequest(self::PAYMILLL_REQUEST_TYPE_CREATE, $PaymillRefund);
+        } catch (PaymillException $Exception) {
+            $Process->addHistory(
+                'PAYMILL :: Refund operation failed.'
+                .' Reason: "'.$Exception->getMessage().'".'
+                .' ReasonCode: "'.$Exception->getCode().'".'
+                .' Transaction #'.$Transaction->getTxId()
+            );
+
+            $RefundTransaction->error();
+
+            throw $Exception;
+        }
+
+        if ($Response->getStatus() !== 'refunded') {
+            $Process->addHistory(
+                'PAYMILL :: Refund operation failed.'
+                .' Status: "'.$Response->getStatus().'".'
+                .' Transaction #'.$Transaction->getTxId()
+            );
+
+            $RefundTransaction->error();
+
+            $this->throwPaymillException(self::PAYMILL_ERROR_TRANSACTION_FAILED);
+        }
+
+        $paymillRefundId = $Response->getId();
+
+        $RefundTransaction->setData(self::ATTR_PAYMILL_REFUND_ID, $paymillRefundId);
+        $RefundTransaction->updateData();
+        $RefundTransaction->complete();
+    }
+
+    /**
+     * Execute payment
+     *
+     * @param string $paymillToken - Unique PAYMILL Token for an authorized transaction
+     * @return void
+     *
+     * @throws PaymillException
+     * @throws QUI\ERP\Exception
+     * @throws QUI\Exception
+     */
+    public function paymillRefund($paymillToken)
+    {
+        $this->addOrderHistoryEntry('Refund transactions');
 
         $Transaction      = new PaymillTransactionRequest();
         $PriceCalculation = $this->Order->getPriceCalculation();
@@ -338,19 +539,15 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
                     return $Request->create($RequestData);
                     break;
             }
+        } catch (PaymillApiException $Exception) {
+            throw new PaymillException(
+                $Exception->getErrorMessage(),
+                $Exception->getResponseCode()
+            );
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-
-            $this->addOrderHistoryEntry(
-                'API ERROR -> "'.$Exception->getMessage().'"'
-                .' | Check error log for further details.'
-            );
-
-            $this->saveOrder();
             $this->throwPaymillException();
         }
-
-        $this->throwPaymillException();
     }
 
     /**
@@ -368,7 +565,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
         $lg  = 'quiqqer/payment-paymill';
         $msg = $L->get($lg, 'payment.error_msg.'.$errorCode);
 
-        $Exception = new PaymillException($msg);
+        $Exception = new PaymillException($msg, 0, $exceptionAttributes);
         $Exception->setAttributes($exceptionAttributes);
 
         throw $Exception;
