@@ -494,7 +494,8 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
 
             $descriptionText = $L->get(
                 'quiqqer/payment-paymill',
-                'Payment.default_transaction_description', [
+                'Payment.default_transaction_description',
+                [
                     'url'     => QUI::conf('globals', 'host'),
                     'orderId' => $this->Order->getPrefixedId()
                 ]
