@@ -1,7 +1,8 @@
 <?php
 
 use QUI\ERP\Order\Handler;
-use QUI\ERP\Payments\Paymill\Payment;
+use QUI\ERP\Payments\Paymill\Recurring\Payment;
+use QUI\ERP\Payments\Paymill\Payment as BasePayment;
 use QUI\Utils\Security\Orthos;
 use QUI\ERP\Payments\Paymill\PaymillException;
 use QUI\ERP\Payments\Paymill\PaymillApiException;
@@ -15,15 +16,16 @@ use QUI\ERP\Payments\Paymill\PaymillApiException;
  * @throws QUI\Exception
  */
 QUI::$Ajax->registerFunction(
-    'package_quiqqer_payment-paymill_ajax_checkout',
+    'package_quiqqer_payment-paymill_ajax_recurring_checkout',
     function ($orderHash, $paymillToken) {
         $orderHash = Orthos::clear($orderHash);
 
         try {
             $Order = Handler::getInstance()->getOrderByHash($orderHash);
+            $Order->setAttribute(BasePayment::ATTR_PAYMILL_TOKEN, $paymillToken);
 
-            $Payment = new Payment($Order);
-            $Payment->checkout($paymillToken);
+            $Payment = new Payment();
+            $Payment->createSubscription($Order);
         } catch (PaymillApiException $Exception) {
             throw new QUI\Exception(
                 QUI::getLocale()->get(

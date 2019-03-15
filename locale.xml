@@ -66,6 +66,10 @@
 <li><b>{orderId}</b> - Order number (with prefix)</li>
 </ul>]]></en>
         </locale>
+        <locale name="settings.category.paymill_offers.title">
+            <de><![CDATA[Paymill Angebot (Offers)]]></de>
+            <en><![CDATA[Paymill Offers]]></en>
+        </locale>
 
         <!-- PaymentDisplay -->
         <locale name="PaymentDisplay.configuration_error">
@@ -97,6 +101,22 @@
 
     <groups name="quiqqer/payment-paymill" datatype="php">
 
+        <!-- Ajax messages -->
+        <locale name="message.ajax.recurring.deleteOffer.success">
+            <de><![CDATA[Das Paymill-Angebot [offerId] wurde erfolgreich gelöscht.]]></de>
+            <en><![CDATA[The Paymill Offer [offerId] was deleted successfully.]]></en>
+        </locale>
+
+        <!-- Error messages -->
+        <locale name="exception.ajax.checkout.paymill_error">
+            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
+        </locale>
+        <locale name="exception.ajax.checkout.error">
+            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
+        </locale>
+        
         <!-- Class: Payment -->
         <locale name="Payment.order.description">
             <de><![CDATA[Bestellung #[orderId]]]></de>
@@ -126,6 +146,59 @@
             <de><![CDATA[Die Rückzahlung mit PAYMILL konnte nicht erfolgreich durchgeführt werden. Bitte überprüfen Sie die Transaktions-Logs.]]></de>
             <en><![CDATA[The refund with PAYMILL could not be successfully completed. Please check the transaction logs.]]></en>
         </locale>
+
+        <!-- History -->
+        <locale name="history.order.offer_created">
+            <de><![CDATA[Paymill Angebot (Offer) erstellt. ID: [offerId]]]></de>
+            <en><![CDATA[Paymill Offer created. ID: [offerId]]]></en>
+        </locale>
+        <locale name="history.order.payment_created">
+            <de><![CDATA[Paymill Zahlungsmittel (Payment) erstellt. ID: [paymentId]]]></de>
+            <en><![CDATA[Paymill Payment created. ID: [paymentId]]]></en>
+        </locale>
+        
+        
+        
+        <locale name="history.order.read_billing_plan.error">
+            <de><![CDATA[Fehler bei Erstellung des PayPal Billing Plans -> Es konnten keine Abonnement-Informationen aus der Bestellung gelesen werden]]></de>
+            <en><![CDATA[Error while creating the PayPal Billing Plan -> No plan (subscription) information could be read from the order]]></en>
+        </locale>
+        <locale name="history.order.billing_agreement_created">
+            <de><![CDATA[PayPal Billing Agreement (Zustimmung zu Abrechnungsplan) erstellt. Link zur Zustimmung: [approvalUrl]]]></de>
+            <en><![CDATA[PayPal Billing Agreement created. Link for approval: [approvalUrl]]]></en>
+        </locale>
+        <locale name="history.order.billing_agreement_accepted">
+            <de><![CDATA[PayPal Billing Agreement (Zustimmung zu Abrechnungsplan) durch Kunden zugestimmt. Zustimmungs-Token: [agreementToken]. Zustimmungs-ID: [agreementId].]]></de>
+            <en><![CDATA[PayPal Billing Agreement accepted by customer. Approval token: [agreementToken]. Approval ID: [agreementId].]]></en>
+        </locale>
+        <locale name="history.invoice.error.agreement_id_not_found">
+            <de><![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit PayPal zu begleichen, jedoch enthielten die Rechnungsdaten keine zugeordnete Abrechnungsvereinbarung.]]></de>
+            <en><![CDATA[An attempt was made to settle the recurring payment invoice using PayPal, but the invoice data did not contain an associated billing agreement.]]></en>
+        </locale>
+        <locale name="history.invoice.error.agreement_not_found">
+            <de>
+                <![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit PayPal zu begleichen, jedoch wurde die zugeordnete Abrechnungsvereinbarung [billingAgreementId] nicht im System gefunden.]]></de>
+            <en><![CDATA[An attempt was made to settle the recurring payment invoice using PayPal, but the associated billing agreement [billingAgreementId] was not found in the system.]]></en>
+        </locale>
+        <locale name="history.invoice.error.general">
+            <de><![CDATA[Beim Versuch, die Zahlung der Rechnung über PayPal durchzuführen, ist ein QUIQQER-Fehler aufgetreten. Bitte Fehler-Logs prüfen.]]></de>
+            <en><![CDATA[A QUIQQER error occurred when attempting to pay the invoice via PayPal. Please check error logs.]]></en>
+        </locale>
+
+        <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Subscriptions -->
+        <locale name="exception.Recurring.Payment.createSubscription.missing_token">
+            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da das zugehörige Autorisierungs-Token nicht übergeben wurde. Bitte wiederholen Sie den Vorgang oder wählen Sie eine andere Zahlungsmethode.]]></de>
+            <en><![CDATA[No subscription can be created for the order because the corresponding authorization token is missing. Please try again or choose a different payment option.]]></en>
+        </locale>
+        <locale name="exception.Recurring.Payment.createSubscription.not_recurring">
+            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da das Zahlungsmittel, welches Sie angegeben haben  (z.B. Ihre Kreditkarte), nicht für wiederkehrende Zahlungen zugelassen ist. Bitte wählen Sie ein anderes Zahlungsmittel oder wählen Sie eine andere Zahlungsmethode.]]></de>
+            <en><![CDATA[No subscription can be created for the order as the payment instrument you have specified (e.g. your credit card) is not eligible for recurring payments. Please select another payment instrument or choose another payment method.]]></en>
+        </locale>
+        <locale name="recurring.subscription.name">
+            <de><![CDATA[Ihre Bestellung [orderReference] auf [url]]]></de>
+            <en><![CDATA[Your order [orderReference] at [url]]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/payment-paymill" datatype="js">
@@ -152,6 +225,40 @@
         <locale name="history.transaction_id">
             <de><![CDATA[PAYMILL Transaktions-ID: [transactionId]]]></de>
             <en><![CDATA[PAYMILL Transaction ID: [transactionId]]]></en>
+        </locale>
+
+        <!-- Control: package/quiqqer/payment-paymill/bin/controls/backend/Offers -->
+        <locale name="controls.backend.Offers.tbl.btn.delete">
+            <de><![CDATA[Löschen]]></de>
+            <en><![CDATA[Delete]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.tbl.id">
+            <de><![CDATA[Offer Id]]></de>
+            <en><![CDATA[Offer Id]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.tbl.name">
+            <de><![CDATA[Name]]></de>
+            <en><![CDATA[Name]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.tbl.created_at">
+            <de><![CDATA[erstellt am]]></de>
+            <en><![CDATA[created at]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.information" html="true">
+            <de><![CDATA[Das Paymill Angebot (Offer) <b>[offerId]</b> wird bei Paymill gelöscht.]]></de>
+            <en><![CDATA[The Paymill Offer <b>[offerId]</b> will be deleted at Paymill.]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.title">
+            <de><![CDATA[Paymill Angebot (Offer) löschen]]></de>
+            <en><![CDATA[Delete Paymill Offer]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.text">
+            <de><![CDATA[Soll das Paymill Angebot gelöscht werden?]]></de>
+            <en><![CDATA[Shall the Paymill Offer be deleted?]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.ok">
+            <de><![CDATA[Angebot löschen]]></de>
+            <en><![CDATA[Delete Offer]]></en>
         </locale>
 
     </groups>

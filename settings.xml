@@ -84,6 +84,19 @@
                     </settings>
                 </category>
 
+                <category name="paymill_offers">
+                    <icon>fa fa-credit-card</icon>
+                    <title>
+                        <locale group="quiqqer/payment-paymill" var="settings.category.paymill_offers.title"/>
+                    </title>
+
+                    <settings name="paymill_offers" title="paymill_offers">
+                        <input type="hidden" data-qui="package/quiqqer/payment-paymill/bin/controls/backend/Offers" label="false">
+                        </input>
+                    </settings>
+
+                </category>
+
             </categories>
         </window>
 
