@@ -1,25 +1,25 @@
 /**
- * List of all PayPal Billing Agreements
+ * List of all Paymill Subscriptions
  *
- * @module package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements
+ * @module package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions
  * @author www.pcsg.de (Patrick Müller)
  */
-define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements', [
+define('package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions', [
 
     'qui/controls/Control',
     'qui/controls/loader/Loader',
     'qui/controls/windows/Confirm',
     'qui/controls/buttons/Button',
     'controls/grid/Grid',
-    'package/quiqqer/payment-paymill/bin/PayPal',
+    'package/quiqqer/payment-paymill/bin/Paymill',
 
-    'package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreementWindow',
+    'package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow',
 
     'Locale',
 
-    'css!package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements.css'
+    'css!package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions.css'
 
-], function (QUIControl, QUILoader, QUIConfirm, QUIButton, Grid, PayPal, BillingAgreementWindow, QUILocale) {
+], function (QUIControl, QUILoader, QUIConfirm, QUIButton, Grid, Paymill, SubscriptionWindow, QUILocale) {
     "use strict";
 
     var lg = 'quiqqer/payment-paymill';
@@ -27,7 +27,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
+        Type   : 'package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions',
 
         Binds: [
             'refresh',
@@ -80,7 +80,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
                     break;
             }
 
-            return PayPal.getBillingAgreementList({
+            return Paymill.getSubscriptions({
                 perPage: this.$Grid.options.perPage,
                 page   : this.$Grid.options.page,
                 sortBy : this.$Grid.options.sortBy,
@@ -114,7 +114,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
 
         $onImport: function () {
             this.$Content = new Element('div', {
-                'class': 'quiqqer-payment-paymill-billingagreements field-container-field'
+                'class': 'quiqqer-payment-paymill-subscriptions field-container-field'
             }).inject(this.getElm(), 'after');
 
             this.Loader.inject(this.$Content);
@@ -137,8 +137,8 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
 
             // Search
             this.$SearchInput = new Element('input', {
-                'class'    : 'quiqqer-payment-paymill-billingagreements-search',
-                placeholder: QUILocale.get(lg, 'controls.backend.BillingAgreements.search.placeholder'),
+                'class'    : 'quiqqer-payment-paymill-subscriptions-search',
+                placeholder: QUILocale.get(lg, 'controls.backend.Subscriptions.search.placeholder'),
                 events     : {
                     keydown: function (event) {
                         if (typeof event !== 'undefined' &&
@@ -161,7 +161,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
                 pagination       : true,
                 multipleSelection: true,
                 serverSort       : true,
-                sortOn           : 'paypal_agreement_id',
+                sortOn           : 'paymill_subscription_id',
                 sortBy           : 'DESC',
 
                 accordion           : false,
@@ -170,34 +170,34 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
 
                 buttons    : [{
                     name     : 'details',
-                    text     : QUILocale.get(lg, 'controls.backend.BillingAgreements.tbl.btn.details'),
-                    textimage: 'fa fa-paypal',
+                    text     : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.btn.details'),
+                    textimage: 'fa fa-credit-card',
                     events   : {
                         onClick: this.$clickDetails
                     }
                 }],
                 columnModel: [{
-                    header   : QUILocale.get(lg, 'controls.backend.BillingAgreements.tbl.active_status'),
+                    header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.active_status'),
                     dataIndex: 'active_status',
                     dataType : 'node',
                     width    : 45
                 }, {
-                    header   : QUILocale.get(lg, 'controls.backend.BillingAgreements.tbl.paypal_agreement_id'),
-                    dataIndex: 'paypal_agreement_id',
+                    header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.paymill_subscription_id'),
+                    dataIndex: 'paymill_subscription_id',
                     dataType : 'string',
                     width    : 150
                 }, {
-                    header   : QUILocale.get(lg, 'controls.backend.BillingAgreements.tbl.paypal_plan_id'),
-                    dataIndex: 'paypal_plan_id',
+                    header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.paymill_offer_id'),
+                    dataIndex: 'paymill_offer_id',
                     dataType : 'string',
                     width    : 225
                 }, {
-                    header   : QUILocale.get(lg, 'controls.backend.BillingAgreements.tbl.customer_text'),
+                    header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.customer_text'),
                     dataIndex: 'customer_text',
                     dataType : 'string',
                     width    : 200
                 }, {
-                    header   : QUILocale.get(lg, 'controls.backend.BillingAgreements.tbl.global_process_id'),
+                    header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.global_process_id'),
                     dataIndex: 'global_process_id',
                     dataType : 'string',
                     width    : 250
@@ -249,10 +249,10 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/BillingAgreements',
         $clickDetails: function () {
             var self = this;
 
-            new BillingAgreementWindow({
-                billingAgreementId: this.$Grid.getSelectedData()[0].paypal_agreement_id,
+            new SubscriptionWindow({
+                billingAgreementId: this.$Grid.getSelectedData()[0].paymill_subscription_id,
                 events            : {
-                    onCancelBillingAgreement: function () {
+                    onCancelSubscription: function () {
                         self.refresh();
                     }
                 }

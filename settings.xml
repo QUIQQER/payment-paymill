@@ -97,6 +97,19 @@
 
                 </category>
 
+                <category name="paymill_subscriptions">
+                    <icon>fa fa-credit-card</icon>
+                    <title>
+                        <locale group="quiqqer/payment-paymill" var="settings.category.paymill_subscriptions.title"/>
+                    </title>
+
+                    <settings name="paymill_subscriptions" title="paymill_subscriptions">
+                        <input type="hidden" data-qui="package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions" label="false">
+                        </input>
+                    </settings>
+
+                </category>
+
             </categories>
         </window>
 

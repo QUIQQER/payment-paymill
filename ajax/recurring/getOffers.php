@@ -1,7 +1,7 @@
 <?php
 
 use QUI\ERP\Payments\Paymill\Recurring\Offers;
-use QUI\ERP\Payments\PayPal\PayPalException;
+use QUI\ERP\Payments\Paymill\PaymillException;
 use QUI\Utils\Security\Orthos;
 use QUI\Utils\Grid;
 
@@ -10,7 +10,7 @@ use QUI\Utils\Grid;
  *
  * @param array $searchParams - Grid search params
  * @return array - PayPal Order/Payment ID and Order hash
- * @throws PayPalException
+ * @throws PaymillException
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_payment-paymill_ajax_recurring_getOffers',

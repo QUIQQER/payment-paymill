@@ -31,7 +31,7 @@ class Payment extends BasePayment implements RecurringPaymentInterface
      */
     public function getTitle()
     {
-        return $this->getLocale()->get('quiqqer/payment-paypal', 'payment.recurring.title');
+        return $this->getLocale()->get('quiqqer/payment-paymill', 'payment.recurring.title');
     }
 
     /**
@@ -39,7 +39,7 @@ class Payment extends BasePayment implements RecurringPaymentInterface
      */
     public function getDescription()
     {
-        return $this->getLocale()->get('quiqqer/payment-paypal', 'payment.recurring.description');
+        return $this->getLocale()->get('quiqqer/payment-paymill', 'payment.recurring.description');
     }
 
     /**
@@ -162,7 +162,7 @@ class Payment extends BasePayment implements RecurringPaymentInterface
 
         $Step->setTitle(
             QUI::getLocale()->get(
-                'quiqqer/payment-paypal',
+                'quiqqer/payment-paymill',
                 'payment.step.title'
             )
         );

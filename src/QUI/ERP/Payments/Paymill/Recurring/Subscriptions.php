@@ -20,11 +20,11 @@ use QUI\ERP\Plans\Utils as ErpPlansUtils;
 /**
  * Class Subscriptions
  *
- * Handler for PayPal Billing Agreement management
+ * Handler for PayPal Subscription management
  */
 class Subscriptions
 {
-    const TBL_BILLING_AGREEMENTS = 'paypal_billing_agreements';
+    const TBL_SUBSCRIPTIONS = 'paymill_subscriptions';
 
     /**
      * @var QUI\ERP\Payments\Paymill\Payment
@@ -32,7 +32,7 @@ class Subscriptions
     protected static $Payment = null;
 
     /**
-     * Create a PayPal Billing Agreement based on a Billing Plan
+     * Create a PayPal Subscription based on a Billing Plan
      *
      * @param AbstractOrder $Order
      * @return void
@@ -170,9 +170,9 @@ class Subscriptions
      */
     public static function billSubscriptionBalance(Invoice $Invoice)
     {
-        $billingAgreementId = $Invoice->getPaymentDataEntry(RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID);
+        $subscriptionId = $Invoice->getPaymentDataEntry(RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID);
 
-        if (empty($billingAgreementId)) {
+        if (empty($subscriptionId)) {
             throw new PaymillException(
                 QUI::getLocale()->get(
                     'quiqqer/payment-paypal',
@@ -185,7 +185,7 @@ class Subscriptions
             );
         }
 
-        $data = self::getSubscriptionData($billingAgreementId);
+        $data = self::getSubscriptionData($subscriptionId);
 
         if ($data === false) {
             throw new PaymillException(
@@ -193,7 +193,7 @@ class Subscriptions
                     'quiqqer/payment-paypal',
                     'exception.Recurring.agreement_not_found',
                     [
-                        'billingAgreementId' => $billingAgreementId
+                        'billingAgreementId' => $subscriptionId
                     ]
                 ),
                 404
@@ -221,7 +221,7 @@ class Subscriptions
                 )
             ],
             [
-                RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID => $billingAgreementId
+                RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID => $subscriptionId
             ]
         );
     }
@@ -314,34 +314,34 @@ class Subscriptions
     }
 
     /**
-     * Get details of a Billing Agreement
+     * Get details of a Subscription
      *
-     * @param string $billingAgreementId
+     * @param string $subscriptionId
      * @return array
      * @throws PaymillException
      */
-    public static function getSubscriptionDetails($billingAgreementId)
+    public static function getSubscriptionDetails($subscriptionId)
     {
-        return self::payPalApiRequest(
-            RecurringPayment::PAYPAL_REQUEST_TYPE_GET_BILLING_AGREEMENT,
-            [],
-            [
-                RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID => $billingAgreementId
-            ]
-        );
+        $Subscription = new PaymillSubscriptionRequest();
+        $Subscription->setId($subscriptionId);
+
+        $data = Utils::paymillApiRequest(BasePayment::PAYMILLL_REQUEST_TYPE_GET, $Subscription);
+
+        return $data['data'];
     }
 
     /**
-     * Cancel a Billing Agreement
+     * Cancel a Subscription
      *
-     * @param int|string $billingAgreementId
+     * @param int|string $subscriptionId
      * @param string $reason (optional) - The reason why the billing agreement is being cancelled
      * @return void
      * @throws PaymillException
+     * @throws \QUI\Database\Exception
      */
-    public static function cancelSubscription($billingAgreementId, $reason = '')
+    public static function cancelSubscription($subscriptionId, $reason = '')
     {
-        $data = self::getSubscriptionData($billingAgreementId);
+        $data = self::getSubscriptionData($subscriptionId);
 
         if (empty($data)) {
             return;
@@ -355,27 +355,10 @@ class Subscriptions
             return;
         }
 
-        if (empty($reason)) {
-            $reason = $Locale->get(
-                'quiqqer/payment-paypal',
-                'recurring.billing_agreement.cancel.note',
-                [
-                    'url'             => Utils::getProjectUrl(),
-                    'globalProcessId' => $data['globalProcessId']
-                ]
-            );
-        }
-
         try {
-            self::payPalApiRequest(
-                RecurringPayment::PAYPAL_REQUEST_TYPE_CANCEL_BILLING_AGREEMENT,
-                [
-                    'note' => $reason
-                ],
-                [
-                    RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID => $billingAgreementId
-                ]
-            );
+            $Subscription = new PaymillSubscriptionRequest();
+            $Subscription->setId($subscriptionId);
+            Utils::paymillApiRequest(BasePayment::PAYMILLL_REQUEST_TYPE_DELETE, $Subscription);
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
@@ -387,93 +370,31 @@ class Subscriptions
             );
         }
 
-        // Remove from QUIQQER database
-//        QUI::getDataBase()->delete(
-//            self::getSubscriptionsTable(),
-//            [
-//                'paypal_agreement_id' => $billingAgreementId
-//            ]
-//        );
+        // Set status in QUIQQER database to "not active"
+        QUI::getDataBase()->update(
+            self::getSubscriptionsTable(),
+            [
+                'active' => 0
+            ],
+            [
+                'paymill_subscription_id' => $subscriptionId
+            ]
+        );
     }
 
     /**
-     * Execute a Billing Agreement
+     * Get available data by Subscription ID
      *
-     * @param AbstractOrder $Order
-     * @param string $agreementToken
-     * @return void
-     * @throws PaymillException
-     */
-    public static function executeSubscription(AbstractOrder $Order, string $agreementToken)
-    {
-        try {
-            $response = self::payPalApiRequest(
-                RecurringPayment::PAYPAL_REQUEST_TYPE_EXECUTE_BILLING_AGREEMENT,
-                [],
-                [
-                    RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_TOKEN => $agreementToken
-                ]
-            );
-        } catch (PaymillException $Exception) {
-            $Order->addHistory('PayPal :: PayPal API ERROR. Please check error logs.');
-            Utils::saveOrder($Order);
-
-            QUI\System\Log::writeException($Exception);
-
-            throw new PaymillException(
-                QUI::getLocale()->get(
-                    'quiqqer/payment-paypal',
-                    'exception.Recurring.order.error'
-                )
-            );
-        }
-
-        $Order->addHistory(Utils::getHistoryText('order.billing_agreement_accepted', [
-            'agreementToken' => $agreementToken,
-            'agreementId'    => $response['id']
-        ]));
-
-        $Order->setPaymentData(RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_TOKEN, $agreementToken);
-        $Order->setPaymentData(RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID, $response['id']);
-        $Order->setPaymentData(BasePayment::ATTR_PAYMILL_PAYMENT_SUCCESSFUL, true);
-        Utils::saveOrder($Order);
-
-        // Save billing agreement reference in database
-        try {
-            QUI::getDataBase()->insert(
-                self::getSubscriptionsTable(),
-                [
-                    'paypal_agreement_id' => $Order->getPaymentDataEntry(RecurringPayment::ATTR_PAYMILL_BILLING_AGREEMENT_ID),
-                    'paypal_plan_id'      => $Order->getPaymentDataEntry(RecurringPayment::ATTR_PAYMILL_BILLING_PLAN_ID),
-                    'customer'            => json_encode($Order->getCustomer()->getAttributes()),
-                    'global_process_id'   => $Order->getHash()
-                ]
-            );
-        } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
-
-            throw new PaymillException(
-                QUI::getLocale()->get(
-                    'quiqqer/payment-paypal',
-                    'exception.Recurring.order.error'
-                )
-            );
-        }
-    }
-
-    /**
-     * Get available data by Billing Agreement ID
-     *
-     * @param string $billingAgreementId - PayPal Billing Agreement ID
+     * @param string $subscriptionId - PayPal Subscription ID
      * @return array|false
      */
-    protected static function getSubscriptionData($billingAgreementId)
+    protected static function getSubscriptionData($subscriptionId)
     {
         try {
             $result = QUI::getDataBase()->fetch([
                 'from'  => self::getSubscriptionsTable(),
                 'where' => [
-                    'paypal_agreement_id' => $billingAgreementId
+                    'paypal_agreement_id' => $subscriptionId
                 ]
             ]);
         } catch (\Exception $Exception) {
@@ -498,6 +419,6 @@ class Subscriptions
      */
     protected static function getSubscriptionsTable()
     {
-        return QUI::getDBTableName(self::TBL_BILLING_AGREEMENTS);
+        return QUI::getDBTableName(self::TBL_SUBSCRIPTIONS);
     }
 }

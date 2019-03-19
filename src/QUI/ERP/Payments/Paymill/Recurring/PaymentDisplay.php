@@ -1,21 +1,14 @@
 <?php
 
-/**
- * This file contains QUI\ERP\Payments\Example\ExpressPaymentDisplay
- */
-
 namespace QUI\ERP\Payments\Paymill\Recurring;
 
 use QUI;
-use QUI\ERP\Order\Utils\Utils as OrderUtils;
-use QUI\ERP\Order\Controls\OrderProcess\Finish as FinishStep;
-use QUI\ERP\Accounting\Payments\Order\Payment as PaymentStep;
 use QUI\ERP\Payments\Paymill\Provider;
 
 /**
  * Class PaymentDisplay
  *
- * Display PayPal Billing payment process
+ * Display Paymill recurring payment process
  */
 class PaymentDisplay extends QUI\Control
 {
@@ -29,11 +22,11 @@ class PaymentDisplay extends QUI\Control
     {
         parent::__construct($attributes);
 
-        $this->setJavaScriptControl('package/quiqqer/payment-paypal/bin/controls/recurring/PaymentDisplay');
+        $this->setJavaScriptControl('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay');
 
         if (Provider::isApiSetUp() === false) {
             throw new QUI\ERP\Order\ProcessingException([
-                'quiqqer/payment-paypal',
+                'quiqqer/payment-paymill',
                 'exception.message.missing.setup'
             ]);
         }
@@ -55,6 +48,11 @@ class PaymentDisplay extends QUI\Control
         $Engine->assign([
             'apiSetUp' => Provider::isApiSetUp()
         ]);
+
+        $this->setJavaScriptControlOption('orderhash', $Order->getHash());
+        $this->setJavaScriptControlOption('publickey', Provider::getApiSetting('public_key'));
+        $this->setJavaScriptControlOption('currency', $Order->getCurrency()->getCode());
+        $this->setJavaScriptControlOption('displaylang', QUI::getLocale()->getCurrent());
 
         return $Engine->fetch(dirname(__FILE__).'/PaymentDisplay.html');
     }

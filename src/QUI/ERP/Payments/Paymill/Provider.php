@@ -8,6 +8,7 @@ namespace QUI\ERP\Payments\Paymill;
 
 use QUI;
 use QUI\ERP\Accounting\Payments\Api\AbstractPaymentProvider;
+use QUI\ERP\Payments\Paymill\Recurring\Payment as RecurringPayment;
 
 /**
  * Class Provider
@@ -22,7 +23,8 @@ class Provider extends AbstractPaymentProvider
     public function getPaymentTypes()
     {
         return [
-            Payment::class
+            Payment::class,
+            RecurringPayment::class
         ];
     }
 

@@ -14,6 +14,14 @@
             <de><![CDATA[PAYMILL Kreditkartenzahlung]]></de>
             <en><![CDATA[PAYMILL credit card payment]]></en>
         </locale>
+        <locale name="payment.recurring.title">
+            <de><![CDATA[PAYMILL Kreditkartenzahlung für Abonnements]]></de>
+            <en><![CDATA[PAYMILL credit card payment for subscriptions]]></en>
+        </locale>
+        <locale name="payment.recurring.description">
+            <de><![CDATA[Zahlung von wiederkehrenden Zahlungen per Kreditkarte]]></de>
+            <en><![CDATA[Payment of recurring payments via credit card]]></en>
+        </locale>
 
         <!-- Settings -->
         <locale name="settings.menu.title">
@@ -67,8 +75,12 @@
 </ul>]]></en>
         </locale>
         <locale name="settings.category.paymill_offers.title">
-            <de><![CDATA[Paymill Angebot (Offers)]]></de>
+            <de><![CDATA[Paymill Angebote (Offers)]]></de>
             <en><![CDATA[Paymill Offers]]></en>
+        </locale>
+        <locale name="settings.category.paymill_subscriptions.title">
+            <de><![CDATA[Paymill Abonnements (Subscriptions)]]></de>
+            <en><![CDATA[Paymill Subscriptions]]></en>
         </locale>
 
         <!-- PaymentDisplay -->
@@ -259,6 +271,76 @@
         <locale name="controls.backend.Offers.delete.ok">
             <de><![CDATA[Angebot löschen]]></de>
             <en><![CDATA[Delete Offer]]></en>
+        </locale>
+
+        <!-- Control: package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow -->
+        <locale name="controls.backend.SubscriptionWindow.title">
+            <de><![CDATA[Paymill Abonnement (Subscription)]]></de>
+            <en><![CDATA[Paymill Subscription]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.btn.cancel">
+            <de><![CDATA[Abonnement kündigen]]></de>
+            <en><![CDATA[Cancel subscription]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.title">
+            <de><![CDATA[Abonnement kündigen]]></de>
+            <en><![CDATA[Cancel Subscription]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.information">
+            <de><![CDATA[Durch diesen Vorgang werden <b>keine zukünftigen Zahlungen</b> mehr von Paymill in Bezug auf dieses Abonnement durchgeführt. Dies lässt sich <b>nicht rückgängig machen!</b>]]></de>
+            <en><![CDATA[Through this process, <b>no future payments</b> will be made by Paymill with respect to this subscription. This can <b>not be undone!</b>]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.text">
+            <de><![CDATA[Soll das Abonnement wirklich gekündigt werden?]]></de>
+            <en><![CDATA[Shall the Subscription be cancelled?]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.confirm">
+            <de><![CDATA[Jetzt kündigen]]></de>
+            <en><![CDATA[Cancel now]]></en>
+        </locale>
+
+        <!-- Control: package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions -->
+        <locale name="controls.backend.Subscriptions.tbl.btn.details">
+            <de><![CDATA[Details anzeigen]]></de>
+            <en><![CDATA[Show details]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.paymill_subscription_id">
+            <de><![CDATA[Abonnement ID]]></de>
+            <en><![CDATA[Subscription ID]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.paymill_offer_id">
+            <de><![CDATA[Angebots-ID]]></de>
+            <en><![CDATA[Offer ID]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.customer_text">
+            <de><![CDATA[Kunde]]></de>
+            <en><![CDATA[Customer]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.global_process_id">
+            <de><![CDATA[Vorgangs-Nr.]]></de>
+            <en><![CDATA[Global process ID]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.active_status">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.search.placeholder">
+            <de><![CDATA[Vorgangs-Nr.]]></de>
+            <en><![CDATA[Global process ID]]></en>
+        </locale>
+
+        <!-- package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay -->
+        <locale name="controls.recurring.PaymentDisplay.recurring_info">
+            <de><![CDATA[Mit einem Klick auf <b>Wiederkehrende Zahlung autorisieren</b> willigen Sie ein, dass <b>[interval]</b> einen Betrag von <b>[sum]</b> mit Ihrer Kreditkarte bezahlt wird.]]></de>
+            <en><![CDATA[By clicking <b>Authorize recurring payment</b> you agree to pay the amount of <b>[sum]</b> <b>[interval]</b> via your credit card.]]></en>
+        </locale>
+        <locale name="controls.recurring.PaymentDisplay.btn_pay.text">
+            <de><![CDATA[Wiederkehrende Zahlung autorisieren]]></de>
+            <en><![CDATA[Authorize recurring payment]]></en>
+        </locale>
+        <locale name="controls.recurring.PaymentDisplay.btn_pay.title">
+            <de><![CDATA[Hier klicken, um eine regelmäßige Zahlung mit Ihrer Kreditkarte zu autorisieren]]></de>
+            <en><![CDATA[Click here to authorize a recurring payment via your credit card]]></en>
         </locale>
 
     </groups>

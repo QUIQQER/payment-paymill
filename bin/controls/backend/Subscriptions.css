@@ -1,10 +1,10 @@
-.quiqqer-payment-paymill-billingagreements {
+.quiqqer-payment-paymill-subscriptions {
     float: left;
     height: 100%;
     width: calc(100% - 190px);
 }
 
-.quiqqer-payment-paymill-billingagreements-search {
+.quiqqer-payment-paymill-subscriptions-search {
     margin: 10px 0;
     width: 50%;
 }
