@@ -97,6 +97,24 @@ define('package/quiqqer/payment-paymill/bin/classes/Paymill', [
         },
 
         /**
+         * Create a Paymill Subscription for an order
+         *
+         * @param {String} orderHash
+         * @param {String} paymillToken
+         * @return {Promise}
+         */
+        createSubscription: function (orderHash, paymillToken) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('package_quiqqer_payment-paymill_ajax_recurring_createSubscription', resolve, {
+                    'package'   : pkg,
+                    orderHash   : orderHash,
+                    paymillToken: paymillToken,
+                    onError     : reject
+                })
+            });
+        },
+
+        /**
          * Cancel a Paymill Subscription
          *
          * @param {string} subscriptionId
@@ -104,7 +122,7 @@ define('package/quiqqer/payment-paymill/bin/classes/Paymill', [
          */
         cancelSubscription: function (subscriptionId) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get('package_quiqqer_payment-paymill_ajax_recurring_cancelSubscription', resolve, {
+                QUIAjax.post('package_quiqqer_payment-paymill_ajax_recurring_cancelSubscription', resolve, {
                     'package'     : pkg,
                     subscriptionId: subscriptionId,
                     onError       : reject

@@ -107,7 +107,7 @@ class Offers
         QUI::getDataBase()->insert(
             self::getOffersTable(),
             [
-                'paypal_id'           => $offerId,
+                'paymill_id'          => $offerId,
                 'identification_hash' => self::getIdentificationHash($Order)
             ]
         );

@@ -109,6 +109,16 @@
             <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
 
+        <!-- Cron -->
+        <locale name="cron.processUnpaidInvoices.title">
+            <de><![CDATA[Paymill: Rechnungen für wiederkehrende Zahlungen abarbeiten]]></de>
+            <en><![CDATA[Paymill: Process invoices for recurring payments]]></en>
+        </locale>
+        <locale name="cron.processUnpaidInvoices.description">
+            <de><![CDATA[Für alle offenen Rechnungen mit wiederkehrenden Zahlungen die passenden Paymill-Transaktionen finden und intern buchen]]></de>
+            <en><![CDATA[For all open invoices with recurring payments, find the matching Paymill transactions and book them internally]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/payment-paymill" datatype="php">
@@ -168,39 +178,28 @@
             <de><![CDATA[Paymill Zahlungsmittel (Payment) erstellt. ID: [paymentId]]]></de>
             <en><![CDATA[Paymill Payment created. ID: [paymentId]]]></en>
         </locale>
-        
-        
-        
-        <locale name="history.order.read_billing_plan.error">
-            <de><![CDATA[Fehler bei Erstellung des PayPal Billing Plans -> Es konnten keine Abonnement-Informationen aus der Bestellung gelesen werden]]></de>
-            <en><![CDATA[Error while creating the PayPal Billing Plan -> No plan (subscription) information could be read from the order]]></en>
+        <locale name="history.order.subscription_created">
+            <de><![CDATA[Paymill Abonnement (Subscription) erstellt. ID: [subscriptiondId]]]></de>
+            <en><![CDATA[Paymill Subscription created. ID: [subscriptiondId]]]></en>
         </locale>
-        <locale name="history.order.billing_agreement_created">
-            <de><![CDATA[PayPal Billing Agreement (Zustimmung zu Abrechnungsplan) erstellt. Link zur Zustimmung: [approvalUrl]]]></de>
-            <en><![CDATA[PayPal Billing Agreement created. Link for approval: [approvalUrl]]]></en>
+        <locale name="history.invoice.error.subscription_id_not_found">
+            <de><![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit Paymill zu begleichen, jedoch enthielten die Rechnungsdaten kein zugeordnetes Abonnement (Subscription).]]></de>
+            <en><![CDATA[An attempt was made to settle the recurring payment invoice using Paymill, but the invoice data did not contain an associated Subscription.]]></en>
         </locale>
-        <locale name="history.order.billing_agreement_accepted">
-            <de><![CDATA[PayPal Billing Agreement (Zustimmung zu Abrechnungsplan) durch Kunden zugestimmt. Zustimmungs-Token: [agreementToken]. Zustimmungs-ID: [agreementId].]]></de>
-            <en><![CDATA[PayPal Billing Agreement accepted by customer. Approval token: [agreementToken]. Approval ID: [agreementId].]]></en>
-        </locale>
-        <locale name="history.invoice.error.agreement_id_not_found">
-            <de><![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit PayPal zu begleichen, jedoch enthielten die Rechnungsdaten keine zugeordnete Abrechnungsvereinbarung.]]></de>
-            <en><![CDATA[An attempt was made to settle the recurring payment invoice using PayPal, but the invoice data did not contain an associated billing agreement.]]></en>
-        </locale>
-        <locale name="history.invoice.error.agreement_not_found">
+        <locale name="history.invoice.error.subscription_not_found">
             <de>
-                <![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit PayPal zu begleichen, jedoch wurde die zugeordnete Abrechnungsvereinbarung [billingAgreementId] nicht im System gefunden.]]></de>
-            <en><![CDATA[An attempt was made to settle the recurring payment invoice using PayPal, but the associated billing agreement [billingAgreementId] was not found in the system.]]></en>
+                <![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit Paymill zu begleichen, jedoch wurde das zugehörige Abonnement (Subscription) [subscriptionId] nicht im System gefunden.]]></de>
+            <en><![CDATA[An attempt was made to settle the recurring payment invoice using Paymill, but the associated Subscription [subscriptionId] was not found in the system.]]></en>
         </locale>
         <locale name="history.invoice.error.general">
-            <de><![CDATA[Beim Versuch, die Zahlung der Rechnung über PayPal durchzuführen, ist ein QUIQQER-Fehler aufgetreten. Bitte Fehler-Logs prüfen.]]></de>
-            <en><![CDATA[A QUIQQER error occurred when attempting to pay the invoice via PayPal. Please check error logs.]]></en>
+            <de><![CDATA[Beim Versuch, die Zahlung der Rechnung über Paymill durchzuführen, ist ein QUIQQER-Fehler aufgetreten. Bitte Fehler-Logs prüfen.]]></de>
+            <en><![CDATA[A QUIQQER error occurred when attempting to pay the invoice via Paymill. Please check error logs.]]></en>
         </locale>
 
         <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Subscriptions -->
         <locale name="exception.Recurring.Payment.createSubscription.missing_token">
-            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da das zugehörige Autorisierungs-Token nicht übergeben wurde. Bitte wiederholen Sie den Vorgang oder wählen Sie eine andere Zahlungsmethode.]]></de>
-            <en><![CDATA[No subscription can be created for the order because the corresponding authorization token is missing. Please try again or choose a different payment option.]]></en>
+            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da die Autorisierung bei Paymill fehlgeschlagen ist. Bitte wiederholen Sie den Vorgang oder wählen Sie eine andere Zahlungsmethode.]]></de>
+            <en><![CDATA[No subscription can be created for the order because the corresponding authorization with Paymill failed. Please try again or choose a different payment option.]]></en>
         </locale>
         <locale name="exception.Recurring.Payment.createSubscription.not_recurring">
             <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da das Zahlungsmittel, welches Sie angegeben haben  (z.B. Ihre Kreditkarte), nicht für wiederkehrende Zahlungen zugelassen ist. Bitte wählen Sie ein anderes Zahlungsmittel oder wählen Sie eine andere Zahlungsmethode.]]></de>
@@ -209,6 +208,14 @@
         <locale name="recurring.subscription.name">
             <de><![CDATA[Ihre Bestellung [orderReference] auf [url]]]></de>
             <en><![CDATA[Your order [orderReference] at [url]]]></en>
+        </locale>
+        <locale name="exception.Recurring.Subscriptions.subscription_id_not_found">
+            <de><![CDATA[Paymill Abonnement (Subscription) wurde in Rechnung [invoiceId] nicht gefunden.]]></de>
+            <en><![CDATA[Paymill Subscription was not found in Invoice [invoiceId].]]></en>
+        </locale>
+        <locale name="exception.Recurring.Subscriptions.subscription_not_found">
+            <de><![CDATA[Daten für Paymill Abonnement (Subscription) [subscriptionId] wurde in Rechnung [invoiceId] nicht gefunden.]]></de>
+            <en><![CDATA[Data from Paymill Subscription [subscriptionId] was not found in Invoice [invoiceId].]]></en>
         </locale>
 
     </groups>

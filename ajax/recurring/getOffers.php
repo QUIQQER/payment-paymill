@@ -34,8 +34,8 @@ QUI::$Ajax->registerFunction(
         $count  = 0;
 
         if (!empty($list)) {
-            $offers = $list['data'];
-            $count  = $list['data_count'];
+            $offers = $list;
+            $count  = count($list);
         }
 
         foreach ($offers as $k => $offer) {

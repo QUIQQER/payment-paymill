@@ -2,13 +2,10 @@
 
 namespace QUI\ERP\Payments\Paymill\Recurring;
 
-use Symfony\Component\HttpFoundation\Response;
 use QUI;
 use QUI\ERP\Payments\Paymill\Payment as BasePayment;
 use QUI\ERP\Order\AbstractOrder;
 use QUI\ERP\Payments\Paymill\PaymillException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use QUI\ERP\Accounting\Payments\Order\Payment as OrderProcessStepPayments;
 use QUI\ERP\Accounting\Payments\Types\RecurringPaymentInterface;
 use QUI\ERP\Accounting\Invoice\Invoice;
 
@@ -84,66 +81,11 @@ class Payment extends BasePayment implements RecurringPaymentInterface
      * @param Invoice $Invoice
      * @return void
      * @throws PaymillException
+     * @throws \Exception
      */
     public function captureSubscription(Invoice $Invoice)
     {
-        Subscriptions::billBillingAgreementBalance($Invoice);
-    }
-
-    /**
-     * Execute the request from the payment provider
-     *
-     * @param QUI\ERP\Accounting\Payments\Gateway\Gateway $Gateway
-     *
-     * @throws QUI\ERP\Order\Basket\Exception
-     * @throws QUI\Exception
-     */
-    public function executeGatewayPayment(QUI\ERP\Accounting\Payments\Gateway\Gateway $Gateway)
-    {
-        $Order        = $Gateway->getOrder();
-        $OrderProcess = new QUI\ERP\Order\OrderProcess([
-            'orderHash' => $Order->getHash()
-        ]);
-
-        $goToBasket = false;
-
-        if ($Gateway->isSuccessRequest()) {
-            if (empty($_REQUEST['token'])) {
-                $goToBasket = true;
-            } else {
-                try {
-                    Subscriptions::executeBillingAgreement($Order, $_REQUEST['token']);
-
-                    $GoToStep = new QUI\ERP\Order\Controls\OrderProcess\Finish([
-                        'Order' => $Gateway->getOrder()
-                    ]);
-                } catch (\Exception $Exception) {
-                    $goToBasket = true;
-                }
-            }
-        } elseif ($Gateway->isCancelRequest()) {
-            $GoToStep = new OrderProcessStepPayments([
-                'Order' => $Gateway->getOrder()
-            ]);
-        } else {
-            $goToBasket = true;
-        }
-
-        if ($goToBasket) {
-            $GoToStep = new QUI\ERP\Order\Controls\OrderProcess\Basket([
-                'Order' => $Gateway->getOrder()
-            ]);
-        }
-
-        $processingUrl = $OrderProcess->getStepUrl($GoToStep->getName());
-
-        // Umleitung zur Bestellung
-        $Redirect = new RedirectResponse($processingUrl);
-        $Redirect->setStatusCode(Response::HTTP_SEE_OTHER);
-
-        echo $Redirect->getContent();
-        $Redirect->send();
-        exit;
+        Subscriptions::billSubscriptionBalance($Invoice);
     }
 
     /**
@@ -193,19 +135,20 @@ class Payment extends BasePayment implements RecurringPaymentInterface
      */
     public function getSubscriptionIdByOrder(AbstractOrder $Order)
     {
-        return $Order->getPaymentDataEntry(self::ATTR_PAYMILL_BILLING_AGREEMENT_ID);
+        return $Order->getPaymentDataEntry(self::ATTR_PAYMILL_SUBSCRIPTION_ID);
     }
 
     /**
      * Cancel a Subscription
      *
-     * @param int|string $billingAgreementId
+     * @param int|string $subscriptionId
      * @param string $reason (optional) - The reason why the billing agreement is being cancelled
      * @return void
      * @throws PaymillException
+     * @throws \Exception
      */
-    public function cancelSubscription($billingAgreementId, $reason = '')
+    public function cancelSubscription($subscriptionId, $reason = '')
     {
-        Subscriptions::cancelBillingAgreement($billingAgreementId, $reason);
+        Subscriptions::cancelSubscription($subscriptionId, $reason);
     }
 }

@@ -185,12 +185,12 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions', [
                     header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.paymill_subscription_id'),
                     dataIndex: 'paymill_subscription_id',
                     dataType : 'string',
-                    width    : 150
+                    width    : 200
                 }, {
                     header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.paymill_offer_id'),
                     dataIndex: 'paymill_offer_id',
                     dataType : 'string',
-                    width    : 225
+                    width    : 200
                 }, {
                     header   : QUILocale.get(lg, 'controls.backend.Subscriptions.tbl.customer_text'),
                     dataIndex: 'customer_text',
@@ -250,8 +250,8 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions', [
             var self = this;
 
             new SubscriptionWindow({
-                billingAgreementId: this.$Grid.getSelectedData()[0].paymill_subscription_id,
-                events            : {
+                subscriptionId: this.$Grid.getSelectedData()[0].paymill_subscription_id,
+                events        : {
                     onCancelSubscription: function () {
                         self.refresh();
                     }

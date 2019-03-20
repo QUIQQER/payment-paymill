@@ -42,12 +42,19 @@ class PaymentDisplay extends QUI\Control
     public function getBody()
     {
         $Engine = QUI::getTemplateManager()->getEngine();
-        $Order  = $this->getAttribute('Order');
+
+        /* @var $Order QUI\ERP\Order\OrderInProcess */
+        $Order = $this->getAttribute('Order');
         $this->setJavaScriptControlOption('orderhash', $Order->getHash());
 
         $Engine->assign([
             'apiSetUp' => Provider::isApiSetUp()
         ]);
+
+        $PriceCalculation = $Order->getPriceCalculation();
+        $amount           = $PriceCalculation->getSum()->precision(2)->get() * 100;
+        $this->setJavaScriptControlOption('amount', $amount);
+        $this->setJavaScriptControlOption('currency', $Order->getCurrency()->getCode());
 
         $this->setJavaScriptControlOption('orderhash', $Order->getHash());
         $this->setJavaScriptControlOption('publickey', Provider::getApiSetting('public_key'));

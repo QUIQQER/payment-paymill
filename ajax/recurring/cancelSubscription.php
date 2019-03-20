@@ -11,7 +11,7 @@ use QUI\ERP\Payments\Paymill\Recurring\Subscriptions;
  * @throws PaymillException
  */
 QUI::$Ajax->registerFunction(
-    'package_quiqqer_payment-paymill_ajax_recurring_getSubscription',
+    'package_quiqqer_payment-paymill_ajax_recurring_cancelSubscription',
     function ($subscriptionId) {
         Subscriptions::cancelSubscription($subscriptionId);
     },

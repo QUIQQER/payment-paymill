@@ -9,6 +9,7 @@
 define('package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow', [
 
     'qui/controls/windows/Popup',
+    'qui/controls/windows/Confirm',
     'qui/controls/loader/Loader',
     'qui/controls/buttons/Button',
 
@@ -19,7 +20,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow'
 
     'css!package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow.css'
 
-], function (QUIPopup, QUILoader, QUIButton, QUILocale, QUIAjax, Paymill) {
+], function (QUIPopup, QUIConfirm, QUILoader, QUIButton, QUILocale, QUIAjax, Paymill) {
     "use strict";
 
     var lg = 'quiqqer/payment-paymill';
@@ -66,7 +67,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow'
             var self = this,
                 CancelBtn;
 
-            this.getElm().addClass('quiqqer-payment-paymill-backend-billingagreementwindow');
+            this.getElm().addClass('quiqqer-payment-paymill-backend-subscriptionwindow');
 
             this.Loader.show();
 
@@ -120,7 +121,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow'
                 },
 
                 events: {
-                    onSubmit: function () {
+                    onSubmit: function (Popup) {
                         Popup.Loader.show();
 
                         Paymill.cancelSubscription(self.getAttribute('subscriptionId')).then(function () {

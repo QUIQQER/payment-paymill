@@ -171,7 +171,10 @@ define('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay', 
                         checkoutLoaderShow();
 
                         self.$getPaymillToken().then(function (token) {
-                            self.$checkout(token).then(function () {
+
+                            console.log(token);
+
+                            Paymill.createSubscription(self.getAttribute('orderhash'), token).then(function () {
                                 self.$OrderProcess.next();
                             }, function (Error) {
                                 checkoutLoaderHide();
@@ -181,7 +184,7 @@ define('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay', 
                         }, function () {
                             checkoutLoaderHide();
 
-                            (function() {
+                            (function () {
                                 self.$OrderProcess.resize();
                             }).delay(200);
                         });
@@ -229,6 +232,9 @@ define('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay', 
                     currency  : self.getAttribute('currency')
                 }, function (Error, Result) {
                     if (Error) {
+
+                        console.log(Error);
+
                         reject(Error);
                     } else {
                         resolve(Result.token);

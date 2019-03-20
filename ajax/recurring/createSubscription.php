@@ -8,7 +8,7 @@ use QUI\ERP\Payments\Paymill\PaymillException;
 use QUI\ERP\Payments\Paymill\PaymillApiException;
 
 /**
- * Execute PAYMILL payment for an Order
+ * Create a Paymill Subscription for an Order
  *
  * @param string $orderHash - Unique order hash to identify Order
  * @param string $paymillToken - Unique PAYMILL payment token for this Order
@@ -16,7 +16,7 @@ use QUI\ERP\Payments\Paymill\PaymillApiException;
  * @throws QUI\Exception
  */
 QUI::$Ajax->registerFunction(
-    'package_quiqqer_payment-paymill_ajax_recurring_checkout',
+    'package_quiqqer_payment-paymill_ajax_recurring_createSubscription',
     function ($orderHash, $paymillToken) {
         $orderHash = Orthos::clear($orderHash);
 

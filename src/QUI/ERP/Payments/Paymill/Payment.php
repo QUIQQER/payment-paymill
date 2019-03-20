@@ -562,7 +562,7 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
                     break;
             }
         } catch (PaymillSdkException $Exception) {
-            QUI\System\Log::writeException($Exception);
+            QUI\System\Log::writeDebugException($Exception);
 
             throw new PaymillApiException(
                 $Exception->getErrorMessage(),
