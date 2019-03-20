@@ -171,9 +171,6 @@ define('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay', 
                         checkoutLoaderShow();
 
                         self.$getPaymillToken().then(function (token) {
-
-                            console.log(token);
-
                             Paymill.createSubscription(self.getAttribute('orderhash'), token).then(function () {
                                 self.$OrderProcess.next();
                             }, function (Error) {
@@ -232,9 +229,6 @@ define('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay', 
                     currency  : self.getAttribute('currency')
                 }, function (Error, Result) {
                     if (Error) {
-
-                        console.log(Error);
-
                         reject(Error);
                     } else {
                         resolve(Result.token);
