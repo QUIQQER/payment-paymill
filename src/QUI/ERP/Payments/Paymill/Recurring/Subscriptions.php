@@ -389,8 +389,6 @@ class Subscriptions
             $paymillResponse = Utils::getLastPaymillApiResponse();
             return $paymillResponse['body']['data'][0];
         }
-
-
     }
 
     /**
