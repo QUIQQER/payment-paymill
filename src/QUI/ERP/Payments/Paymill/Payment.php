@@ -17,7 +17,7 @@ use QUI;
 use QUI\ERP\Order\AbstractOrder;
 use QUI\ERP\Order\Handler as OrderHandler;
 use QUI\ERP\Accounting\Payments\Transactions\Factory as TransactionFactory;
-use Paymill\Services\PaymillException as PaymillApiException;
+use Paymill\Services\PaymillException as PaymillSdkException;
 
 /**
  * Class Payment
@@ -32,11 +32,16 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
     const ATTR_PAYMILL_TRANSACTION_ID   = 'paymill-TransactionId';
     const ATTR_PAYMILL_REFUND_ID        = 'paymill-RefundId';
     const ATTR_PAYMILL_ORDER_SUCCESSFUL = 'paymill-OrderSuccessful';
+    const ATTR_PAYMILL_TOKEN            = 'paymill-Token';
 
     /**
      * PAYMILL REST API request types
      */
     const PAYMILLL_REQUEST_TYPE_CREATE = 'paymill-api-create';
+    const PAYMILLL_REQUEST_TYPE_UPDATE = 'paymill-api-update';
+    const PAYMILLL_REQUEST_TYPE_DELETE = 'paymill-api-delete';
+    const PAYMILLL_REQUEST_TYPE_GET    = 'paymill-api-get';
+    const PAYMILLL_REQUEST_TYPE_LIST   = 'paymill-api-list';
 
     /**
      * Error codes
@@ -489,7 +494,8 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
 
             $descriptionText = $L->get(
                 'quiqqer/payment-paymill',
-                'Payment.default_transaction_description', [
+                'Payment.default_transaction_description',
+                [
                     'url'     => QUI::conf('globals', 'host'),
                     'orderId' => $this->Order->getPrefixedId()
                 ]
@@ -525,11 +531,11 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      *
      * @param string $requestType - Request type (see self::PAYMILL_REQUEST_TYPE_*)
      * @param PaymillBaseRequest $RequestData - Request type with filled data
-     * @return PaymillBaseResponse
+     * @return PaymillBaseResponse|array
      *
      * @throws PaymillException
      */
-    protected function paymillApiRequest($requestType, $RequestData)
+    public function paymillApiRequest($requestType, $RequestData)
     {
         $Request = $this->getPaymillRequest();
 
@@ -538,9 +544,27 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
                 case self::PAYMILLL_REQUEST_TYPE_CREATE:
                     return $Request->create($RequestData);
                     break;
+
+                case self::PAYMILLL_REQUEST_TYPE_UPDATE:
+                    return $Request->update($RequestData);
+                    break;
+
+                case self::PAYMILLL_REQUEST_TYPE_DELETE:
+                    return $Request->delete($RequestData);
+                    break;
+
+                case self::PAYMILLL_REQUEST_TYPE_GET:
+                    return $Request->getOne($RequestData);
+                    break;
+
+                case self::PAYMILLL_REQUEST_TYPE_LIST:
+                    return $Request->getAll($RequestData);
+                    break;
             }
-        } catch (PaymillApiException $Exception) {
-            throw new PaymillException(
+        } catch (PaymillSdkException $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+
+            throw new PaymillApiException(
                 $Exception->getErrorMessage(),
                 $Exception->getResponseCode()
             );
@@ -548,6 +572,16 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
             QUI\System\Log::writeException($Exception);
             $this->throwPaymillException();
         }
+    }
+
+    /**
+     * Returns the last response data from the Paymill API as an array
+     *
+     * @return array
+     */
+    public function getLastPaymillApiResponse()
+    {
+        return $this->getPaymillRequest()->getLastResponse();
     }
 
     /**

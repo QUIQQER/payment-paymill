@@ -84,6 +84,32 @@
                     </settings>
                 </category>
 
+                <category name="paymill_offers">
+                    <icon>fa fa-credit-card</icon>
+                    <title>
+                        <locale group="quiqqer/payment-paymill" var="settings.category.paymill_offers.title"/>
+                    </title>
+
+                    <settings name="paymill_offers" title="paymill_offers">
+                        <input type="hidden" data-qui="package/quiqqer/payment-paymill/bin/controls/backend/Offers" label="false">
+                        </input>
+                    </settings>
+
+                </category>
+
+                <category name="paymill_subscriptions">
+                    <icon>fa fa-credit-card</icon>
+                    <title>
+                        <locale group="quiqqer/payment-paymill" var="settings.category.paymill_subscriptions.title"/>
+                    </title>
+
+                    <settings name="paymill_subscriptions" title="paymill_subscriptions">
+                        <input type="hidden" data-qui="package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions" label="false">
+                        </input>
+                    </settings>
+
+                </category>
+
             </categories>
         </window>
 

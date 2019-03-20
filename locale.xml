@@ -14,6 +14,14 @@
             <de><![CDATA[PAYMILL Kreditkartenzahlung]]></de>
             <en><![CDATA[PAYMILL credit card payment]]></en>
         </locale>
+        <locale name="payment.recurring.title">
+            <de><![CDATA[PAYMILL Kreditkartenzahlung für Abonnements]]></de>
+            <en><![CDATA[PAYMILL credit card payment for subscriptions]]></en>
+        </locale>
+        <locale name="payment.recurring.description">
+            <de><![CDATA[Zahlung von wiederkehrenden Zahlungen per Kreditkarte]]></de>
+            <en><![CDATA[Payment of recurring payments via credit card]]></en>
+        </locale>
 
         <!-- Settings -->
         <locale name="settings.menu.title">
@@ -66,6 +74,14 @@
 <li><b>{orderId}</b> - Order number (with prefix)</li>
 </ul>]]></en>
         </locale>
+        <locale name="settings.category.paymill_offers.title">
+            <de><![CDATA[Paymill Angebote (Offers)]]></de>
+            <en><![CDATA[Paymill Offers]]></en>
+        </locale>
+        <locale name="settings.category.paymill_subscriptions.title">
+            <de><![CDATA[Paymill Abonnements (Subscriptions)]]></de>
+            <en><![CDATA[Paymill Subscriptions]]></en>
+        </locale>
 
         <!-- PaymentDisplay -->
         <locale name="PaymentDisplay.configuration_error">
@@ -93,10 +109,36 @@
             <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
 
+        <!-- Cron -->
+        <locale name="cron.processUnpaidInvoices.title">
+            <de><![CDATA[Paymill: Rechnungen für wiederkehrende Zahlungen abarbeiten]]></de>
+            <en><![CDATA[Paymill: Process invoices for recurring payments]]></en>
+        </locale>
+        <locale name="cron.processUnpaidInvoices.description">
+            <de><![CDATA[Für alle offenen Rechnungen mit wiederkehrenden Zahlungen die passenden Paymill-Transaktionen finden und intern buchen]]></de>
+            <en><![CDATA[For all open invoices with recurring payments, find the matching Paymill transactions and book them internally]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/payment-paymill" datatype="php">
 
+        <!-- Ajax messages -->
+        <locale name="message.ajax.recurring.deleteOffer.success">
+            <de><![CDATA[Das Paymill-Angebot [offerId] wurde erfolgreich gelöscht.]]></de>
+            <en><![CDATA[The Paymill Offer [offerId] was deleted successfully.]]></en>
+        </locale>
+
+        <!-- Error messages -->
+        <locale name="exception.ajax.checkout.paymill_error">
+            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
+        </locale>
+        <locale name="exception.ajax.checkout.error">
+            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
+        </locale>
+        
         <!-- Class: Payment -->
         <locale name="Payment.order.description">
             <de><![CDATA[Bestellung #[orderId]]]></de>
@@ -126,6 +168,56 @@
             <de><![CDATA[Die Rückzahlung mit PAYMILL konnte nicht erfolgreich durchgeführt werden. Bitte überprüfen Sie die Transaktions-Logs.]]></de>
             <en><![CDATA[The refund with PAYMILL could not be successfully completed. Please check the transaction logs.]]></en>
         </locale>
+
+        <!-- History -->
+        <locale name="history.order.offer_created">
+            <de><![CDATA[Paymill Angebot (Offer) erstellt. ID: [offerId]]]></de>
+            <en><![CDATA[Paymill Offer created. ID: [offerId]]]></en>
+        </locale>
+        <locale name="history.order.payment_created">
+            <de><![CDATA[Paymill Zahlungsmittel (Payment) erstellt. ID: [paymentId]]]></de>
+            <en><![CDATA[Paymill Payment created. ID: [paymentId]]]></en>
+        </locale>
+        <locale name="history.order.subscription_created">
+            <de><![CDATA[Paymill Abonnement (Subscription) erstellt. ID: [subscriptiondId]]]></de>
+            <en><![CDATA[Paymill Subscription created. ID: [subscriptiondId]]]></en>
+        </locale>
+        <locale name="history.invoice.error.subscription_id_not_found">
+            <de><![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit Paymill zu begleichen, jedoch enthielten die Rechnungsdaten kein zugeordnetes Abonnement (Subscription).]]></de>
+            <en><![CDATA[An attempt was made to settle the recurring payment invoice using Paymill, but the invoice data did not contain an associated Subscription.]]></en>
+        </locale>
+        <locale name="history.invoice.error.subscription_not_found">
+            <de>
+                <![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit Paymill zu begleichen, jedoch wurde das zugehörige Abonnement (Subscription) [subscriptionId] nicht im System gefunden.]]></de>
+            <en><![CDATA[An attempt was made to settle the recurring payment invoice using Paymill, but the associated Subscription [subscriptionId] was not found in the system.]]></en>
+        </locale>
+        <locale name="history.invoice.error.general">
+            <de><![CDATA[Beim Versuch, die Zahlung der Rechnung über Paymill durchzuführen, ist ein QUIQQER-Fehler aufgetreten. Bitte Fehler-Logs prüfen.]]></de>
+            <en><![CDATA[A QUIQQER error occurred when attempting to pay the invoice via Paymill. Please check error logs.]]></en>
+        </locale>
+
+        <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Subscriptions -->
+        <locale name="exception.Recurring.Payment.createSubscription.missing_token">
+            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da die Autorisierung bei Paymill fehlgeschlagen ist. Bitte wiederholen Sie den Vorgang oder wählen Sie eine andere Zahlungsmethode.]]></de>
+            <en><![CDATA[No subscription can be created for the order because the corresponding authorization with Paymill failed. Please try again or choose a different payment option.]]></en>
+        </locale>
+        <locale name="exception.Recurring.Payment.createSubscription.not_recurring">
+            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da das Zahlungsmittel, welches Sie angegeben haben  (z.B. Ihre Kreditkarte), nicht für wiederkehrende Zahlungen zugelassen ist. Bitte wählen Sie ein anderes Zahlungsmittel oder wählen Sie eine andere Zahlungsmethode.]]></de>
+            <en><![CDATA[No subscription can be created for the order as the payment instrument you have specified (e.g. your credit card) is not eligible for recurring payments. Please select another payment instrument or choose another payment method.]]></en>
+        </locale>
+        <locale name="recurring.subscription.name">
+            <de><![CDATA[Ihre Bestellung [orderReference] auf [url]]]></de>
+            <en><![CDATA[Your order [orderReference] at [url]]]></en>
+        </locale>
+        <locale name="exception.Recurring.Subscriptions.subscription_id_not_found">
+            <de><![CDATA[Paymill Abonnement (Subscription) wurde in Rechnung [invoiceId] nicht gefunden.]]></de>
+            <en><![CDATA[Paymill Subscription was not found in Invoice [invoiceId].]]></en>
+        </locale>
+        <locale name="exception.Recurring.Subscriptions.subscription_not_found">
+            <de><![CDATA[Daten für Paymill Abonnement (Subscription) [subscriptionId] wurde in Rechnung [invoiceId] nicht gefunden.]]></de>
+            <en><![CDATA[Data from Paymill Subscription [subscriptionId] was not found in Invoice [invoiceId].]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/payment-paymill" datatype="js">
@@ -152,6 +244,110 @@
         <locale name="history.transaction_id">
             <de><![CDATA[PAYMILL Transaktions-ID: [transactionId]]]></de>
             <en><![CDATA[PAYMILL Transaction ID: [transactionId]]]></en>
+        </locale>
+
+        <!-- Control: package/quiqqer/payment-paymill/bin/controls/backend/Offers -->
+        <locale name="controls.backend.Offers.tbl.btn.delete">
+            <de><![CDATA[Löschen]]></de>
+            <en><![CDATA[Delete]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.tbl.id">
+            <de><![CDATA[Offer Id]]></de>
+            <en><![CDATA[Offer Id]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.tbl.name">
+            <de><![CDATA[Name]]></de>
+            <en><![CDATA[Name]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.tbl.created_at">
+            <de><![CDATA[erstellt am]]></de>
+            <en><![CDATA[created at]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.information" html="true">
+            <de><![CDATA[Das Paymill Angebot (Offer) <b>[offerId]</b> wird bei Paymill gelöscht.]]></de>
+            <en><![CDATA[The Paymill Offer <b>[offerId]</b> will be deleted at Paymill.]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.title">
+            <de><![CDATA[Paymill Angebot (Offer) löschen]]></de>
+            <en><![CDATA[Delete Paymill Offer]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.text">
+            <de><![CDATA[Soll das Paymill Angebot gelöscht werden?]]></de>
+            <en><![CDATA[Shall the Paymill Offer be deleted?]]></en>
+        </locale>
+        <locale name="controls.backend.Offers.delete.ok">
+            <de><![CDATA[Angebot löschen]]></de>
+            <en><![CDATA[Delete Offer]]></en>
+        </locale>
+
+        <!-- Control: package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow -->
+        <locale name="controls.backend.SubscriptionWindow.title">
+            <de><![CDATA[Paymill Abonnement (Subscription)]]></de>
+            <en><![CDATA[Paymill Subscription]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.btn.cancel">
+            <de><![CDATA[Abonnement kündigen]]></de>
+            <en><![CDATA[Cancel subscription]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.title">
+            <de><![CDATA[Abonnement kündigen]]></de>
+            <en><![CDATA[Cancel Subscription]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.information">
+            <de><![CDATA[Durch diesen Vorgang werden <b>keine zukünftigen Zahlungen</b> mehr von Paymill in Bezug auf dieses Abonnement durchgeführt. Dies lässt sich <b>nicht rückgängig machen!</b>]]></de>
+            <en><![CDATA[Through this process, <b>no future payments</b> will be made by Paymill with respect to this subscription. This can <b>not be undone!</b>]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.text">
+            <de><![CDATA[Soll das Abonnement wirklich gekündigt werden?]]></de>
+            <en><![CDATA[Shall the Subscription be cancelled?]]></en>
+        </locale>
+        <locale name="controls.backend.SubscriptionWindow.cancel.confirm">
+            <de><![CDATA[Jetzt kündigen]]></de>
+            <en><![CDATA[Cancel now]]></en>
+        </locale>
+
+        <!-- Control: package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions -->
+        <locale name="controls.backend.Subscriptions.tbl.btn.details">
+            <de><![CDATA[Details anzeigen]]></de>
+            <en><![CDATA[Show details]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.paymill_subscription_id">
+            <de><![CDATA[Abonnement ID]]></de>
+            <en><![CDATA[Subscription ID]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.paymill_offer_id">
+            <de><![CDATA[Angebots-ID]]></de>
+            <en><![CDATA[Offer ID]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.customer_text">
+            <de><![CDATA[Kunde]]></de>
+            <en><![CDATA[Customer]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.global_process_id">
+            <de><![CDATA[Vorgangs-Nr.]]></de>
+            <en><![CDATA[Global process ID]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.tbl.active_status">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="controls.backend.Subscriptions.search.placeholder">
+            <de><![CDATA[Vorgangs-Nr.]]></de>
+            <en><![CDATA[Global process ID]]></en>
+        </locale>
+
+        <!-- package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay -->
+        <locale name="controls.recurring.PaymentDisplay.recurring_info">
+            <de><![CDATA[Mit einem Klick auf <b>Wiederkehrende Zahlung autorisieren</b> willigen Sie ein, dass <b>[interval]</b> einen Betrag von <b>[sum]</b> mit Ihrer Kreditkarte bezahlt wird.]]></de>
+            <en><![CDATA[By clicking <b>Authorize recurring payment</b> you agree to pay the amount of <b>[sum]</b> <b>[interval]</b> via your credit card.]]></en>
+        </locale>
+        <locale name="controls.recurring.PaymentDisplay.btn_pay.text">
+            <de><![CDATA[Wiederkehrende Zahlung autorisieren]]></de>
+            <en><![CDATA[Authorize recurring payment]]></en>
+        </locale>
+        <locale name="controls.recurring.PaymentDisplay.btn_pay.title">
+            <de><![CDATA[Hier klicken, um eine regelmäßige Zahlung mit Ihrer Kreditkarte zu autorisieren]]></de>
+            <en><![CDATA[Click here to authorize a recurring payment via your credit card]]></en>
         </locale>
 
     </groups>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crons>
+
+    <cron exec="\QUI\ERP\Payments\Paymill\Recurring\Subscriptions::processUnpaidInvoices">
+        <title>
+            <locale group="quiqqer/payment-paymill" var="cron.processUnpaidInvoices.title"/>
+        </title>
+        <description>
+            <locale group="quiqqer/payment-paymill" var="cron.processUnpaidInvoices.description"/>
+        </description>
+    </cron>
+
+</crons>
