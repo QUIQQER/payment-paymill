@@ -41,20 +41,40 @@
             <en><![CDATA[Public Key]]></en>
         </locale>
         <locale name="settings.api.public_key.description">
-            <de>
-                <![CDATA[Den "Public Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die PAYMILL-Integration Ihres Shops zu testen.]]></de>
-            <en>
-                <![CDATA[You can find the "Public Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the PAYMILL integration of your shop.]]></en>
+            <de><![CDATA[Den "Public Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></de>
+            <en><![CDATA[You can find the "Public Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></en>
         </locale>
         <locale name="settings.api.private_key.title">
             <de><![CDATA[Private Key]]></de>
             <en><![CDATA[Private Key]]></en>
         </locale>
         <locale name="settings.api.private_key.description">
-            <de>
-                <![CDATA[Den "Private Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die PAYMILL-Integration Ihres Shops zu testen.]]></de>
-            <en>
-                <![CDATA[You can find the "Private Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the PAYMILL integration of your shop.]]></en>
+            <de><![CDATA[Den "Private Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></de>
+            <en><![CDATA[You can find the "Private Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></en>
+        </locale>
+        <locale name="settings.api.sandbox_public_key.title">
+            <de><![CDATA[Public Key (Sandbox)]]></de>
+            <en><![CDATA[Public Key (Sandbox)]]></en>
+        </locale>
+        <locale name="settings.api.sandbox_public_key.description">
+            <de><![CDATA[Den Sandbox "Public Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></de>
+            <en><![CDATA[You can find the sandbox "Public Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></en>
+        </locale>
+        <locale name="settings.api.sandbox_private_key.title">
+            <de><![CDATA[Private Key (Sandbox)]]></de>
+            <en><![CDATA[Private Key (Sandbox)]]></en>
+        </locale>
+        <locale name="settings.api.sandbox_private_key.description">
+            <de><![CDATA[Den Sandbox "Private Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></de>
+            <en><![CDATA[You can find the sandbox "Private Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>.]]></en>
+        </locale>
+        <locale name="settings.api.sandbox.title">
+            <de><![CDATA[Sanbox-Modus]]></de>
+            <en><![CDATA[Sandbox mode]]></en>
+        </locale>
+        <locale name="settings.api.sandbox.description" html="true">
+            <de><![CDATA[Sandbox-Modus aktivieren (Zahlungen werden nicht tatsächlich durchgeführt sondern nur über eine Testumgebung; nur aktivieren, wenn der Zahlungsprozess mit Paymill getestet werden soll!). <b>Setzt voraus</b>, dass Public Key und Private Key für die Sandbox konfiguriert sind.]]></de>
+            <en><![CDATA[Enable sandbox mode (payments are not actually made but only through a test environment, only enable to test the payment process with Paymill!). <b>Requires</b> that sandbox Public Key and Private Key are configured.]]></en>
         </locale>
         <locale name="settings.category.payment.title">
             <de><![CDATA[Zahlungsvorgang]]></de>
