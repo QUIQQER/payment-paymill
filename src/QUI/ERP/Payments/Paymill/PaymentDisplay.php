@@ -29,12 +29,12 @@ class PaymentDisplay extends QUI\Control
         $this->addCSSFile(dirname(__FILE__).'/PaymentDisplay.css');
         $this->setJavaScriptControl('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay');
 
-        if (Provider::isApiSetUp() === false) {
-            throw new QUI\ERP\Order\ProcessingException([
-                'quiqqer/payment-paymill',
-                'exception.message.missing.setup'
-            ]);
-        }
+//        if (Provider::isApiSetUp() === false) {
+//            throw new QUI\ERP\Order\ProcessingException([
+//                'quiqqer/payment-paymill',
+//                'exception.message.missing.setup'
+//            ]);
+//        }
     }
 
     /**
@@ -60,7 +60,7 @@ class PaymentDisplay extends QUI\Control
         $amount = $PriceCalculation->getSum()->precision(2)->get() * 100;
 
         $this->setJavaScriptControlOption('orderhash', $Order->getHash());
-        $this->setJavaScriptControlOption('publickey', Provider::getApiSetting('public_key'));
+        $this->setJavaScriptControlOption('publickey', Provider::getApiPublicKey());
         $this->setJavaScriptControlOption('amount', $amount);
         $this->setJavaScriptControlOption('currency', $Order->getCurrency()->getCode());
         $this->setJavaScriptControlOption('displaylang', QUI::getLocale()->getCurrent());

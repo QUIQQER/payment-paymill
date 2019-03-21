@@ -2,6 +2,7 @@
 
 namespace QUI\ERP\Payments\Paymill\Recurring;
 
+use function GuzzleHttp\Promise\queue;
 use QUI;
 use QUI\ERP\Payments\Paymill\Provider;
 
@@ -24,12 +25,12 @@ class PaymentDisplay extends QUI\Control
 
         $this->setJavaScriptControl('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay');
 
-        if (Provider::isApiSetUp() === false) {
-            throw new QUI\ERP\Order\ProcessingException([
-                'quiqqer/payment-paymill',
-                'exception.message.missing.setup'
-            ]);
-        }
+//        if (Provider::isApiSetUp() === false) {
+//            throw new QUI\ERP\Order\ProcessingException([
+//                'quiqqer/payment-paymill',
+//                'exception.message.missing.setup'
+//            ]);
+//        }
     }
 
     /**
@@ -57,7 +58,7 @@ class PaymentDisplay extends QUI\Control
         $this->setJavaScriptControlOption('currency', $Order->getCurrency()->getCode());
 
         $this->setJavaScriptControlOption('orderhash', $Order->getHash());
-        $this->setJavaScriptControlOption('publickey', Provider::getApiSetting('public_key'));
+        $this->setJavaScriptControlOption('publickey', Provider::getApiPublicKey());
         $this->setJavaScriptControlOption('currency', $Order->getCurrency()->getCode());
         $this->setJavaScriptControlOption('displaylang', QUI::getLocale()->getCurrent());
 

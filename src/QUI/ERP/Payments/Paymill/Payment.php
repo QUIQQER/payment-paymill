@@ -572,7 +572,11 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
             return $this->PaymillRequest;
         }
 
-        $this->PaymillRequest = new PaymillRequest(Provider::getApiSetting('private_key'));
+        if (Provider::getApiSetting('sandbox')) {
+            $this->PaymillRequest = new PaymillRequest(Provider::getApiSetting('sandbox_private_key'));
+        } else {
+            $this->PaymillRequest = new PaymillRequest(Provider::getApiSetting('private_key'));
+        }
 
         return $this->PaymillRequest;
     }

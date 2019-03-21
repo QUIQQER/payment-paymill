@@ -48,6 +48,20 @@ class Provider extends AbstractPaymentProvider
     }
 
     /**
+     * Get Paymill API public key
+     *
+     * @return string
+     */
+    public static function getApiPublicKey()
+    {
+        if (self::getApiSetting('sandbox')) {
+            return self::getApiSetting('sandbox_public_key');
+        }
+
+        return self::getApiSetting('public_key');
+    }
+
+    /**
      * Get Payment setting
      *
      * @param string $setting - Setting name
@@ -99,17 +113,27 @@ class Provider extends AbstractPaymentProvider
             return false;
         }
 
-        foreach ($apiSettings as $k => $v) {
-            if (empty($v)) {
-                QUI\System\Log::addError(
-                    'Your Paymill API credentials seem to be (partially) missing.'
-                    .' Paymill CAN NOT be used at the moment. Please enter all your'
-                    .' API credentials. See https://dev.quiqqer.com/quiqqer/payment-paymill/wikis/api-configuration'
-                    .' for further instructions.'
-                );
+        $isSetup = true;
 
-                return false;
+        if ($apiSettings['sandbox']) {
+            if (empty($apiSettings['sandbox_public_key']) || empty($apiSettings['sandbox_private_key'])) {
+                $isSetup = false;
             }
+        } else {
+            if (empty($apiSettings['public_key']) || empty($apiSettings['private_key'])) {
+                $isSetup = false;
+            }
+        }
+
+        if (!$isSetup) {
+            QUI\System\Log::addError(
+                'Your Paymill API credentials seem to be (partially) missing.'
+                .' Paymill CAN NOT be used at the moment. Please enter all your'
+                .' API credentials. See https://dev.quiqqer.com/quiqqer/payment-paymill/wikis/api-configuration'
+                .' for further instructions.'
+            );
+
+            return false;
         }
 
         return true;

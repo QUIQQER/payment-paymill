@@ -11,6 +11,16 @@
                 <conf name="private_key">
                     <type><![CDATA[string]]></type>
                 </conf>
+                <conf name="sandbox_public_key">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="sandbox_private_key">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="sandbox">
+                    <type><![CDATA[boolean]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
             </section>
 
             <section name="payment">
@@ -56,6 +66,33 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/payment-paymill" var="settings.api.public_key.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="api.sandbox_private_key" type="text">
+                            <text>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.sandbox_private_key.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.sandbox_private_key.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="api.sandbox_public_key" type="text">
+                            <text>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.sandbox_public_key.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.sandbox_public_key.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="api.sandbox" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.sandbox.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/payment-paymill" var="settings.api.sandbox.description"/>
                             </description>
                         </input>
 
