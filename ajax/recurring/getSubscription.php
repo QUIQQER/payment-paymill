@@ -16,5 +16,5 @@ QUI::$Ajax->registerFunction(
         return Subscriptions::getSubscriptionDetails($subscriptionId);
     },
     ['subscriptionId'],
-    ['Permission::checkAdminUser', 'quiqqer.payments.paymill.offers.view']
+    ['Permission::checkAdminUser', 'quiqqer.payments.paymill.subscriptions.view']
 );

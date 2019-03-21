@@ -16,5 +16,5 @@ QUI::$Ajax->registerFunction(
         Subscriptions::cancelSubscription($subscriptionId);
     },
     ['subscriptionId'],
-    ['Permission::checkAdminUser', 'quiqqer.payments.paymill.offers.view']
+    ['Permission::checkAdminUser', 'quiqqer.payments.paymill.subscriptions.cancel']
 );

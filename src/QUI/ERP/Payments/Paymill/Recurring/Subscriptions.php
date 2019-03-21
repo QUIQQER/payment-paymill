@@ -124,16 +124,7 @@ class Subscriptions
         $PaymillSubscription->setCurrency($Order->getCurrency());
 
         // Set name
-        $PaymillSubscription->setName(
-            QUI::getLocale()->get(
-                'quiqqer/payment-paymill',
-                'recurring.subscription.name',
-                [
-                    'orderReference' => $Order->getPrefixedId(),
-                    'url'            => Utils::getProjectUrl()
-                ]
-            )
-        );
+        $PaymillSubscription->setName(Utils::getTransactionDescription($Order));
 
         // Set period of validity for non-auto-extended subscriptions
         $planDetails = ErpPlansUtils::getPlanDetailsFromOrder($Order);

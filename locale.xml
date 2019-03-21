@@ -41,16 +41,20 @@
             <en><![CDATA[Public Key]]></en>
         </locale>
         <locale name="settings.api.public_key.description">
-            <de><![CDATA[Den "Public Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die PAYMILL-Integration Ihres Shops zu testen.]]></de>
-            <en><![CDATA[You can find the "Public Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the PAYMILL integration of your shop.]]></en>
+            <de>
+                <![CDATA[Den "Public Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die PAYMILL-Integration Ihres Shops zu testen.]]></de>
+            <en>
+                <![CDATA[You can find the "Public Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the PAYMILL integration of your shop.]]></en>
         </locale>
         <locale name="settings.api.private_key.title">
             <de><![CDATA[Private Key]]></de>
             <en><![CDATA[Private Key]]></en>
         </locale>
         <locale name="settings.api.private_key.description">
-            <de><![CDATA[Den "Private Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die PAYMILL-Integration Ihres Shops zu testen.]]></de>
-            <en><![CDATA[You can find the "Private Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the PAYMILL integration of your shop.]]></en>
+            <de>
+                <![CDATA[Den "Private Key" ihres PAYMILL-Kontos finden Sie unter <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Bitte beachten Sie, dass bei <b>Test-</b>Keys keine tatsächlichen Zahlungen durchgeführt werden. Diese sind lediglich dazu gedacht, die PAYMILL-Integration Ihres Shops zu testen.]]></de>
+            <en>
+                <![CDATA[You can find the "Private Key" of your PAYMILL account at <a href="https://app.paymill.com/development/api-keys">https://app.paymill.com/development/api-keys</a>. Please note that <b>test</b> keys do not actually pay. These are only intended to test the PAYMILL integration of your shop.]]></en>
         </locale>
         <locale name="settings.category.payment.title">
             <de><![CDATA[Zahlungsvorgang]]></de>
@@ -101,11 +105,13 @@
             <en><![CDATA[Payment with credit card]]></en>
         </locale>
         <locale name="payment.error_msg.general_error">
-            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <de>
+                <![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
             <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
         <locale name="payment.error_msg.transaction_failed">
-            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <de>
+                <![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
             <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
 
@@ -117,6 +123,36 @@
         <locale name="cron.processUnpaidInvoices.description">
             <de><![CDATA[Für alle offenen Rechnungen mit wiederkehrenden Zahlungen die passenden Paymill-Transaktionen finden und intern buchen]]></de>
             <en><![CDATA[For all open invoices with recurring payments, find the matching Paymill transactions and book them internally]]></en>
+        </locale>
+
+        <!-- Permissions -->
+        <locale name="permission.quiqqer.payments.paymill._header">
+            <de><![CDATA[Paymill]]></de>
+            <en><![CDATA[Paymill]]></en>
+        </locale>
+        <locale name="permission.quiqqer.payments.paymill.offers._header">
+            <de><![CDATA[Paymill - Angebote (Offers)]]></de>
+            <en><![CDATA[Paymill - Offers]]></en>
+        </locale>
+        <locale name="permission.quiqqer.payments.paymill.subscriptions._header">
+            <de><![CDATA[Paymill - Abonnements (Subscriptions)]]></de>
+            <en><![CDATA[Paymill - Subscriptions]]></en>
+        </locale>
+        <locale name="permission.quiqqer.payments.paymill.offers.view">
+            <de><![CDATA[Darf Angebote ansehen]]></de>
+            <en><![CDATA[Can view Offers]]></en>
+        </locale>
+        <locale name="permission.quiqqer.payments.paymill.offers.delete">
+            <de><![CDATA[Darf Angebote löschen]]></de>
+            <en><![CDATA[Can delete Offers]]></en>
+        </locale>
+        <locale name="permission.quiqqer.payments.paymill.subscriptions.view">
+            <de><![CDATA[Darf Abonnements ansehen]]></de>
+            <en><![CDATA[Can view Subscriptions]]></en>
+        </locale>
+        <locale name="permission.quiqqer.payments.paymill.subscriptions.cancel">
+            <de><![CDATA[Darf Abonnements kündigen]]></de>
+            <en><![CDATA[Can cancel Subscriptions]]></en>
         </locale>
 
     </groups>
@@ -131,14 +167,16 @@
 
         <!-- Error messages -->
         <locale name="exception.ajax.checkout.paymill_error">
-            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <de>
+                <![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
             <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
         <locale name="exception.ajax.checkout.error">
-            <de><![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
+            <de>
+                <![CDATA[Beim Kreditkarten-Bezahlungsvorgang ist ein Fehler aufgetreten. Die Zahlung konnte nicht durchgeführt werden. Ihre Kreditkarte wurde nicht belastet. Bitte wiederholen Sie den Vorgang order wenden Sie sich an den Händler.]]></de>
             <en><![CDATA[An error occurred during credit card payment. The payment could not be processed. Your credit card has not been charged. Please try again or contact the merchant.]]></en>
         </locale>
-        
+
         <!-- Class: Payment -->
         <locale name="Payment.order.description">
             <de><![CDATA[Bestellung #[orderId]]]></de>
@@ -155,7 +193,7 @@
             Please contact the shop owner and / or choose another payment method.
             ]]></en>
         </locale>
-        
+
         <locale name="Payment.default_transaction_description">
             <de><![CDATA[Ihre Bestellung bei [url]: [orderId]]]></de>
             <en><![CDATA[Your order at [url]: [orderId]]]></en>
@@ -183,7 +221,8 @@
             <en><![CDATA[Paymill Subscription created. ID: [subscriptiondId]]]></en>
         </locale>
         <locale name="history.invoice.error.subscription_id_not_found">
-            <de><![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit Paymill zu begleichen, jedoch enthielten die Rechnungsdaten kein zugeordnetes Abonnement (Subscription).]]></de>
+            <de>
+                <![CDATA[Es wurde versucht, die Rechnung über wiederkehrende Zahlungen mit Paymill zu begleichen, jedoch enthielten die Rechnungsdaten kein zugeordnetes Abonnement (Subscription).]]></de>
             <en><![CDATA[An attempt was made to settle the recurring payment invoice using Paymill, but the invoice data did not contain an associated Subscription.]]></en>
         </locale>
         <locale name="history.invoice.error.subscription_not_found">
@@ -198,12 +237,15 @@
 
         <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Subscriptions -->
         <locale name="exception.Recurring.Payment.createSubscription.missing_token">
-            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da die Autorisierung bei Paymill fehlgeschlagen ist. Bitte wiederholen Sie den Vorgang oder wählen Sie eine andere Zahlungsmethode.]]></de>
+            <de>
+                <![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da die Autorisierung bei Paymill fehlgeschlagen ist. Bitte wiederholen Sie den Vorgang oder wählen Sie eine andere Zahlungsmethode.]]></de>
             <en><![CDATA[No subscription can be created for the order because the corresponding authorization with Paymill failed. Please try again or choose a different payment option.]]></en>
         </locale>
         <locale name="exception.Recurring.Payment.createSubscription.not_recurring">
-            <de><![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da das Zahlungsmittel, welches Sie angegeben haben  (z.B. Ihre Kreditkarte), nicht für wiederkehrende Zahlungen zugelassen ist. Bitte wählen Sie ein anderes Zahlungsmittel oder wählen Sie eine andere Zahlungsmethode.]]></de>
-            <en><![CDATA[No subscription can be created for the order as the payment instrument you have specified (e.g. your credit card) is not eligible for recurring payments. Please select another payment instrument or choose another payment method.]]></en>
+            <de>
+                <![CDATA[Für die Bestellung kann kein Abonnement erstellt werden, da das Zahlungsmittel, welches Sie angegeben haben  (z.B. Ihre Kreditkarte), nicht für wiederkehrende Zahlungen zugelassen ist. Bitte wählen Sie ein anderes Zahlungsmittel oder wählen Sie eine andere Zahlungsmethode.]]></de>
+            <en>
+                <![CDATA[No subscription can be created for the order as the payment instrument you have specified (e.g. your credit card) is not eligible for recurring payments. Please select another payment instrument or choose another payment method.]]></en>
         </locale>
         <locale name="recurring.subscription.name">
             <de><![CDATA[Ihre Bestellung [orderReference] auf [url]]]></de>
@@ -239,7 +281,7 @@
             <de><![CDATA[Zahlung mit Kreditkarte wird durchgeführt]]></de>
             <en><![CDATA[Credit card payment is being processed]]></en>
         </locale>
-        
+
         <!-- Order history -->
         <locale name="history.transaction_id">
             <de><![CDATA[PAYMILL Transaktions-ID: [transactionId]]]></de>
@@ -294,7 +336,8 @@
             <en><![CDATA[Cancel Subscription]]></en>
         </locale>
         <locale name="controls.backend.SubscriptionWindow.cancel.information">
-            <de><![CDATA[Durch diesen Vorgang werden <b>keine zukünftigen Zahlungen</b> mehr von Paymill in Bezug auf dieses Abonnement durchgeführt. Dies lässt sich <b>nicht rückgängig machen!</b>]]></de>
+            <de>
+                <![CDATA[Durch diesen Vorgang werden <b>keine zukünftigen Zahlungen</b> mehr von Paymill in Bezug auf dieses Abonnement durchgeführt. Dies lässt sich <b>nicht rückgängig machen!</b>]]></de>
             <en><![CDATA[Through this process, <b>no future payments</b> will be made by Paymill with respect to this subscription. This can <b>not be undone!</b>]]></en>
         </locale>
         <locale name="controls.backend.SubscriptionWindow.cancel.text">
@@ -338,7 +381,8 @@
 
         <!-- package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay -->
         <locale name="controls.recurring.PaymentDisplay.recurring_info">
-            <de><![CDATA[Mit einem Klick auf <b>Wiederkehrende Zahlung autorisieren</b> willigen Sie ein, dass <b>[interval]</b> einen Betrag von <b>[sum]</b> mit Ihrer Kreditkarte bezahlt wird.]]></de>
+            <de>
+                <![CDATA[Mit einem Klick auf <b>Wiederkehrende Zahlung autorisieren</b> willigen Sie ein, dass <b>[interval]</b> einen Betrag von <b>[sum]</b> mit Ihrer Kreditkarte bezahlt wird.]]></de>
             <en><![CDATA[By clicking <b>Authorize recurring payment</b> you agree to pay the amount of <b>[sum]</b> <b>[interval]</b> via your credit card.]]></en>
         </locale>
         <locale name="controls.recurring.PaymentDisplay.btn_pay.text">

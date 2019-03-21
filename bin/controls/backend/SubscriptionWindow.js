@@ -103,7 +103,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow'
             new QUIConfirm({
                 maxHeight: 300,
                 maxWidth : 600,
-                autoclose: false,
+                autoclose: true,
 
                 information: QUILocale.get(lg, 'controls.backend.SubscriptionWindow.cancel.information'),
                 title      : QUILocale.get(lg, 'controls.backend.SubscriptionWindow.cancel.title'),
