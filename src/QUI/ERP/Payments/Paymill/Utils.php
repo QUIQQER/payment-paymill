@@ -87,4 +87,48 @@ class Utils
 
         return self::$Payment->getLastPaymillApiResponse();
     }
+
+    /**
+     * Get transaction description for an Order
+     *
+     * This description can be seen in the merchant account at PAYMILL
+     * and the credit card statement of the buyer for an order
+     *
+     * @return string
+     * @throws QUI\Exception
+     */
+    public static function getTransactionDescription(AbstractOrder $Order)
+    {
+        $Conf        = QUI::getPackage('quiqqer/payment-paymill')->getConfig();
+        $description = $Conf->get('payment', 'paymill_transaction_description');
+
+        if (empty($description)) {
+            $description = [];
+        } else {
+            $description = json_decode($description, true);
+        }
+
+        $lang            = $Order->getCustomer()->getLang();
+        $descriptionText = '';
+
+        if (!empty($description[$lang])) {
+            $descriptionText = str_replace(['{orderId}'], [$Order->getPrefixedId()], $description[$lang]);
+        }
+
+        if (empty($descriptionText)) {
+            $L = new QUI\Locale();
+            $L->setCurrent($lang);
+
+            $descriptionText = $L->get(
+                'quiqqer/payment-paymill',
+                'Payment.default_transaction_description',
+                [
+                    'url'     => QUI::conf('globals', 'host'),
+                    'orderId' => $Order->getPrefixedId()
+                ]
+            );
+        }
+
+        return $descriptionText;
+    }
 }
