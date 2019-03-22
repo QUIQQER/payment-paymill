@@ -134,6 +134,7 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow'
 
                         Paymill.cancelSubscription(self.getAttribute('subscriptionId')).then(function () {
                             self.close();
+                            Popup.close();
                             self.fireEvent('cancelSubscription', [self]);
                         }, function () {
                             Popup.Loader.hide();

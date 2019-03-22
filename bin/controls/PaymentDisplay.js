@@ -155,7 +155,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
             };
 
             this.$PayBtn = new QUIButton({
-                'class'  : 'btn-primary',
+                'class'  : 'btn-primary button',
                 disabled : true,
                 text     : QUILocale.get(pkg, 'PaymentDisplay.btn_pay.text', {
                     display_price: this.$PayBtnElm.get('data-price')
