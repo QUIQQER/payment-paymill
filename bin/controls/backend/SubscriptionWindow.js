@@ -73,6 +73,14 @@ define('package/quiqqer/payment-paymill/bin/controls/backend/SubscriptionWindow'
 
             Paymill.getSubscription(this.getAttribute('subscriptionId')).then(function (Subscription) {
                 self.Loader.hide();
+
+                if (!Subscription) {
+                    self.setContent(
+                        QUILocale.get(lg, 'controls.backend.SubscriptionWindow.load_error')
+                    );
+                    return;
+                }
+
                 self.setContent('<pre>' + JSON.stringify(Subscription, null, 2) + '</pre>');
 
                 if (Subscription.status === 'active') {
