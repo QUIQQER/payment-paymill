@@ -180,6 +180,11 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                                 self.fireEvent('processingError', [self]);
                             });
                         }, function () {
+                            self.$showErrorMsg(
+                                QUILocale.get(lg, 'PaymentDisplay.validation_error')
+                            );
+
+                            self.$OrderProcess.resize();
                             checkoutLoaderHide();
                         });
                     }
