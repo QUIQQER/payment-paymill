@@ -160,7 +160,7 @@ define('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay', 
             };
 
             this.$PayBtn = new QUIButton({
-                'class'  : 'btn-primary',
+                'class'  : 'btn-primary button',
                 disabled : true,
                 text     : QUILocale.get(pkg, 'controls.recurring.PaymentDisplay.btn_pay.text'),
                 alt      : QUILocale.get(pkg, 'controls.recurring.PaymentDisplay.btn_pay.title'),
