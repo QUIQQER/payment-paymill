@@ -368,6 +368,10 @@
             <de><![CDATA[Jetzt kündigen]]></de>
             <en><![CDATA[Cancel now]]></en>
         </locale>
+        <locale name="controls.backend.SubscriptionWindow.load_error">
+            <de><![CDATA[Die Abonnement-Details konnten von Paymill nicht abgerufen werden. Dies kann z.B. daran liegen, dass das Abonnement mit einem anderen als dem aktuell verwendeten API-Schlüssel erstellt wurde (z.B. Sandbox).]]></de>
+            <en><![CDATA[The subscription details could not be retrieved from Paymill. This could be because the subscription was created with a different API key than the current one (e.g. sandbox).]]></en>
+        </locale>
 
         <!-- Control: package/quiqqer/payment-paymill/bin/controls/backend/Subscriptions -->
         <locale name="controls.backend.Subscriptions.tbl.btn.details">
