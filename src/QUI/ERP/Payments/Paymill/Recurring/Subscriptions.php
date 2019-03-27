@@ -31,6 +31,16 @@ class Subscriptions
     const TBL_SUBSCRIPTION_TRANSACTIONS = 'paymill_subscription_transactions';
 
     /**
+     * Runtime cache that knows then a transaction history
+     * for a Subscriptios has been freshly fetched from Paymill.
+     *
+     * Prevents multiple unnecessary API calls.
+     *
+     * @var array
+     */
+    protected static $transactionsRefreshed = [];
+
+    /**
      * @var QUI\ERP\Payments\Paymill\Payment
      */
     protected static $Payment = null;
@@ -674,6 +684,10 @@ class Subscriptions
      */
     protected static function refreshTransactionList($subscriptionId)
     {
+        if (isset(self::$transactionsRefreshed[$subscriptionId])) {
+            return;
+        }
+
         // Get global process id
         $data            = self::getSubscriptionData($subscriptionId);
         $globalProcessId = $data['globalProcessId'];
@@ -750,6 +764,8 @@ class Subscriptions
                 ]
             );
         }
+
+        self::$transactionsRefreshed[$subscriptionId] = true;
     }
 
     /**
