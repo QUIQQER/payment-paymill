@@ -280,6 +280,12 @@
             <en><![CDATA[Data from Paymill Subscription [subscriptionId] was not found in Invoice [invoiceId].]]></en>
         </locale>
 
+        <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Payment -->
+        <locale name="recurring.additional_invoice_text">
+            <de><![CDATA[Der Betrag wird automatisch über Ihre Kreditkarte eingezogen.]]></de>
+            <en><![CDATA[The amount will be automatically charged to your credit card.]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/payment-paymill" datatype="js">

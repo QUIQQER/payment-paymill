@@ -141,4 +141,23 @@ class Payment extends BasePayment implements RecurringPaymentInterface
     {
         Subscriptions::cancelSubscription($subscriptionId, $reason);
     }
+
+    /**
+     * Return the extra text for the invoice
+     *
+     * @param QUI\ERP\Accounting\Invoice\Invoice|QUI\ERP\Accounting\Invoice\InvoiceTemporary|QUI\ERP\Accounting\Invoice\InvoiceView $Invoice
+     * @return mixed
+     */
+    public function getInvoiceInformationText($Invoice)
+    {
+        try {
+            return $Invoice->getCustomer()->getLocale()->get(
+                'quiqqer/payment-paymill',
+                'recurring.additional_invoice_text'
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return '';
+        }
+    }
 }
