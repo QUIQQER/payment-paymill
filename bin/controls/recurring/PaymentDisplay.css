@@ -5,3 +5,7 @@
 .quiqqer-payment-paymill-btn-pay {
     margin-top: 25px;
 }
+
+.fa-credit-card:before {
+    content: "\f09d";
+}
