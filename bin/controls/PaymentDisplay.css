@@ -2,3 +2,6 @@
     z-index: 1000 !important;
 }
 
+.fa-credit-card:before {
+    content: "\f09d";
+}
