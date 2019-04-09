@@ -255,8 +255,8 @@
             <en><![CDATA[A QUIQQER error occurred when attempting to pay the invoice via Paymill. Please check error logs.]]></en>
         </locale>
         <locale name="history.invoice.add_paymill_transaction">
-            <de><![CDATA[Rechnungs-Transaktion [quiqqerTransactionId] aus Pamill Transaktion [paymillTransactionId] erzeugt.]]></de>
-            <en><![CDATA[Created invoice transaction [quiqqerTransactionId] out of PayPal transaction [paymillTransactionId].]]></en>
+            <de><![CDATA[Rechnungs-Transaktion [quiqqerTransactionId] aus Paymill Transaktion [paymillTransactionId] erzeugt.]]></de>
+            <en><![CDATA[Created invoice transaction [quiqqerTransactionId] out of Paymill transaction [paymillTransactionId].]]></en>
         </locale>
 
         <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Subscriptions -->
