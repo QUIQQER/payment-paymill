@@ -6,6 +6,10 @@
     margin-top: 25px;
 }
 
+.fa-credit-card {
+    font-family: FontAwesome, "Font Awesome 5 Brands";
+}
+
 .fa-credit-card:before {
     content: "\f09d";
 }

@@ -271,7 +271,7 @@ class Subscriptions
                 $Invoice->addHistory(
                     Utils::getHistoryText('invoice.add_paymill_transaction', [
                         'quiqqerTransactionId' => $InvoiceTransaction->getTxId(),
-                        'paypalTransactionId'  => $transaction['id']
+                        'paymillTransactionId' => $transaction['id']
                     ])
                 );
             } catch (\Exception $Exception) {

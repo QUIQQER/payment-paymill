@@ -181,7 +181,7 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                             });
                         }, function () {
                             self.$showErrorMsg(
-                                QUILocale.get(lg, 'PaymentDisplay.validation_error')
+                                QUILocale.get(pkg, 'PaymentDisplay.validation_error')
                             );
 
                             self.$OrderProcess.resize();
