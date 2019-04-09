@@ -254,6 +254,10 @@
             <de><![CDATA[Beim Versuch, die Zahlung der Rechnung über Paymill durchzuführen, ist ein QUIQQER-Fehler aufgetreten. Bitte Fehler-Logs prüfen.]]></de>
             <en><![CDATA[A QUIQQER error occurred when attempting to pay the invoice via Paymill. Please check error logs.]]></en>
         </locale>
+        <locale name="history.invoice.add_paymill_transaction">
+            <de><![CDATA[Rechnungs-Transaktion [quiqqerTransactionId] aus Pamill Transaktion [paymillTransactionId] erzeugt.]]></de>
+            <en><![CDATA[Created invoice transaction [quiqqerTransactionId] out of PayPal transaction [paymillTransactionId].]]></en>
+        </locale>
 
         <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Subscriptions -->
         <locale name="exception.Recurring.Payment.createSubscription.missing_token">
