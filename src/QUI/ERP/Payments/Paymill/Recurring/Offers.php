@@ -6,6 +6,7 @@ use Paymill\Models\Response\Offer;
 use QUI;
 use QUI\ERP\Order\AbstractOrder;
 use QUI\ERP\Payments\Paymill\Recurring\Payment as RecurringPayment;
+use QUI\ERP\Payments\Paymill\Provider;
 use QUI\ERP\Plans\Utils as ErpPlansUtils;
 use QUI\ERP\Products\Handler\Products as ProductsHandler;
 use Paymill\Models\Request\Offer as PaymillOfferRequest;
@@ -211,10 +212,17 @@ class Offers
         // sort IDs ASC
         sort($productIds);
 
-        $lang     = $Order->getCustomer()->getLang();
-        $totalSum = $Order->getPriceCalculation()->getSum()->get();
+        $lang         = $Order->getCustomer()->getLang();
+        $totalSum     = $Order->getPriceCalculation()->getSum()->get();
+        $hashedString = $lang.$totalSum.implode(',', $productIds);
 
-        return hash('sha256', $lang.$totalSum.implode(',', $productIds));
+        if (Provider::getApiSetting('sandbox')) {
+            $hashedString .= '_sandbox';
+        } else {
+            $hashedString .= '_production';
+        }
+
+        return hash('sha256', $hashedString);
     }
 
     /**
