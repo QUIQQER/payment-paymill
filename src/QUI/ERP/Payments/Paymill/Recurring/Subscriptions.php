@@ -515,6 +515,7 @@ class Subscriptions
             'select' => ['id', 'global_process_id'],
             'where'  => [
                 'paid_status'    => 0,
+                'type'           => InvoiceHandler::TYPE_INVOICE,
                 'payment_method' => [
                     'type'  => 'IN',
                     'value' => $paymentTypeIds
