@@ -249,7 +249,9 @@ class Subscriptions
                     $Invoice->getCurrency(),
                     $Invoice->getHash(),
                     $Payment->getName(),
-                    [],
+                    [
+                        BasePayment::ATTR_PAYMILL_TRANSACTION_ID => $transaction['id']
+                    ],
                     null,
                     false,
                     $Invoice->getGlobalProcessId()

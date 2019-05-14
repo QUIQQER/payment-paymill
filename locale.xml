@@ -258,6 +258,10 @@
             <de><![CDATA[Rechnungs-Transaktion [quiqqerTransactionId] aus Paymill Transaktion [paymillTransactionId] erzeugt.]]></de>
             <en><![CDATA[Created invoice transaction [quiqqerTransactionId] out of Paymill transaction [paymillTransactionId].]]></en>
         </locale>
+        <locale name="history.refund.success">
+            <de><![CDATA[Rückzahlung über Paymill für QUIQQER-Transaktion [quiqqerTransactionId] / Paymill-Transaktion [paymillTransactionId] erfolgreich durchgeführt. Paymill Refund ID: [paymillRefundId]]]></de>
+            <en><![CDATA[Refund via Paymill for QUIQQER transaction [quiqqerTransactionId] / Paymill transaction [paymillTransactionId] successfully completed. Paymill Refund ID: [paymillRefundId]]]></en>
+        </locale>
 
         <!-- Class: QUI\ERP\Payments\Paymill\Recurring\Subscriptions -->
         <locale name="exception.Recurring.Payment.createSubscription.missing_token">
