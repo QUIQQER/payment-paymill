@@ -382,6 +382,18 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
 
         $paymillRefundId = $Response->getId();
 
+        $Process->addHistory(
+            QUI::getLocale()->get(
+                'quiqqer/payment-paymill',
+                'history.refund.success',
+                [
+                    'quiqqerTransactionId' => $Transaction->getTxId(),
+                    'paymillTransactionId' => $paymillTransactionId,
+                    'paymillRefundId'      => $paymillRefundId
+                ]
+            )
+        );
+
         $RefundTransaction->setData(self::ATTR_PAYMILL_REFUND_ID, $paymillRefundId);
         $RefundTransaction->updateData();
         $RefundTransaction->complete();
