@@ -253,7 +253,7 @@ class Subscriptions
                         BasePayment::ATTR_PAYMILL_TRANSACTION_ID => $transaction['id']
                     ],
                     null,
-                    false,
+                    $transaction['created_at'],
                     $Invoice->getGlobalProcessId()
                 );
 
