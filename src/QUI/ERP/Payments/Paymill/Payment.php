@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file contains QUI\ERP\Payments\PAYMILL\Payment
- */
-
 namespace QUI\ERP\Payments\Paymill;
 
 use Paymill\Models\Response\Transaction;
@@ -14,6 +10,7 @@ use Paymill\Models\Request\Transaction as PaymillTransactionRequest;
 use Paymill\Models\Request\Refund as PaymillRefundRequest;
 use QUI\ERP\Accounting\Payments\Gateway\Gateway;
 use QUI;
+use QUI\ERP\Accounting\Payments\Payments;
 use QUI\ERP\Order\AbstractOrder;
 use QUI\ERP\Order\Handler as OrderHandler;
 use QUI\ERP\Accounting\Payments\Transactions\Factory as TransactionFactory;
@@ -99,7 +96,9 @@ class Payment extends QUI\ERP\Accounting\Payments\Api\AbstractPayment
      */
     public function getIcon()
     {
-        return URL_OPT_DIR.'quiqqer/payment-paymill/bin/images/Payment.jpg';
+        return Payments::getInstance()->getHost().
+               URL_OPT_DIR.
+               'quiqqer/payment-paymill/bin/images/Payment.jpg';
     }
 
     /**
