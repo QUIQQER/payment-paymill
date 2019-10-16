@@ -319,6 +319,10 @@
             <de><![CDATA[Bei der Validierung Ihrer Kreditkarten-Daten ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingaben noch einmal und korrigieren diese ggf.]]></de>
             <en><![CDATA[An error occurred during the validation of your credit card data. Please check your entries again and correct them if necessary.]]></en>
         </locale>
+        <locale name="PaymentDisplay.service_provider_error">
+            <de><![CDATA[Die Zahlung per Kreditkarte kann auf Grund eines technischen Fehlers auf Seiten des Zahlungsanbieters aktuell nicht durchgeführt werden. Bitte verwenden Sie eine andere Zahlungsmethode.]]></de>
+            <en><![CDATA[Payment by credit card cannot currently be made due to a technical error on the part of the payment provider. Please use a different payment method.]]></en>
+        </locale>
 
         <!-- Order history -->
         <locale name="history.transaction_id">

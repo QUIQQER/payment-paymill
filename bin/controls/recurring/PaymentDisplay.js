@@ -178,12 +178,31 @@ define('package/quiqqer/payment-paymill/bin/controls/recurring/PaymentDisplay', 
                                 self.$showErrorMsg(Error.getMessage());
                                 self.fireEvent('processingError', [self]);
                             });
-                        }, function () {
-                            checkoutLoaderHide();
+                        }, function (PaymillError) {
+                            if (!("apierror" in PaymillError)) {
+                                QUILocale.get(pkg, 'PaymentDisplay.service_provider_error');
+                                self.fireEvent('processingError', [self]);
 
-                            (function () {
-                                self.$OrderProcess.resize();
-                            }).delay(200);
+                                return;
+                            }
+
+                            switch (PaymillError.apierror) {
+                                case 'invalid_payment_data':
+                                    self.$showErrorMsg(
+                                        QUILocale.get(pkg, 'PaymentDisplay.validation_error')
+                                    );
+
+                                    (function () {
+                                        self.$OrderProcess.resize();
+                                    }).delay(200);
+
+                                    checkoutLoaderHide();
+                                    break;
+
+                                default:
+                                    QUILocale.get(pkg, 'PaymentDisplay.service_provider_error');
+                                    self.fireEvent('processingError', [self]);
+                            }
                         });
                     }
                 }

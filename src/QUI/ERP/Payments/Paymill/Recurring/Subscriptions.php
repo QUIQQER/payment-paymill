@@ -372,7 +372,7 @@ class Subscriptions
     }
 
     /**
-     * Get details of a Subscription
+     * Get details of a Subscription (Paymill data)
      *
      * @param string $subscriptionId
      * @return array
@@ -436,15 +436,30 @@ class Subscriptions
         }
 
         // Set status in QUIQQER database to "not active"
-        QUI::getDataBase()->update(
-            self::getSubscriptionsTable(),
-            [
-                'active' => 0
-            ],
-            [
-                'paymill_subscription_id' => $subscriptionId
-            ]
-        );
+        self::setSubscriptionAsInactive($subscriptionId);
+    }
+
+    /**
+     * Set a subscription as inactive
+     *
+     * @param $subscriptionId
+     * @return void
+     */
+    public static function setSubscriptionAsInactive($subscriptionId)
+    {
+        try {
+            QUI::getDataBase()->update(
+                self::getSubscriptionsTable(),
+                [
+                    'active' => 0
+                ],
+                [
+                    'paymill_subscription_id' => $subscriptionId
+                ]
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+        }
     }
 
     /**
@@ -858,7 +873,7 @@ class Subscriptions
     /**
      * @return string
      */
-    protected static function getSubscriptionsTable()
+    public static function getSubscriptionsTable()
     {
         return QUI::getDBTableName(self::TBL_SUBSCRIPTIONS);
     }
@@ -866,7 +881,7 @@ class Subscriptions
     /**
      * @return string
      */
-    protected static function getSubscriptionTransactionsTable()
+    public static function getSubscriptionTransactionsTable()
     {
         return QUI::getDBTableName(self::TBL_SUBSCRIPTION_TRANSACTIONS);
     }

@@ -143,6 +143,20 @@ class Payment extends BasePayment implements RecurringPaymentInterface
     }
 
     /**
+     * Sets a subscription as inactive (on the side of this QUIQQER system only!)
+     *
+     * IMPORTANT: This does NOT mean that the corresponding subscription at the payment provider
+     * side is cancelled. If you want to do this please use cancelSubscription() !
+     *
+     * @param $subscriptionId
+     * @return void
+     */
+    public function setSubscriptionAsInactive($subscriptionId)
+    {
+        Subscriptions::setSubscriptionAsInactive($subscriptionId);
+    }
+
+    /**
      * Return the extra text for the invoice
      *
      * @param QUI\ERP\Accounting\Invoice\Invoice|QUI\ERP\Accounting\Invoice\InvoiceTemporary|QUI\ERP\Accounting\Invoice\InvoiceView $Invoice
@@ -159,5 +173,84 @@ class Payment extends BasePayment implements RecurringPaymentInterface
             QUI\System\Log::writeException($Exception);
             return '';
         }
+    }
+
+    /**
+     * Checks if the subscription is active at the payment provider side
+     *
+     * @param string|int $subscriptionId
+     * @return bool
+     */
+    public function isSubscriptionActiveAtPaymentProvider($subscriptionId)
+    {
+        try {
+            $data = Subscriptions::getSubscriptionDetails($subscriptionId);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return true;
+        }
+
+        if (!empty($data['status']) && $data['status'] === 'active') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get IDs of all subscriptions
+     *
+     * @param bool $includeInactive (optional) - Include inactive subscriptions [default: false]
+     * @return int[]
+     */
+    public function getSubscriptionIds($includeInactive = false)
+    {
+        $where = [];
+
+        if (empty($includeInactive)) {
+            $where['active'] = 1;
+        }
+
+        try {
+            $result = QUI::getDataBase()->fetch([
+                'select' => ['paymill_subscription_id'],
+                'from'   => Subscriptions::getSubscriptionsTable(),
+                'where'  => $where
+            ]);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return [];
+        }
+
+        return \array_column($result, 'paymill_subscription_id');
+    }
+
+    /**
+     * Get global processing ID of a subscription
+     *
+     * @param string|int $subscriptionId
+     * @return string|false
+     */
+    public function getSubscriptionGlobalProcessingId($subscriptionId)
+    {
+        try {
+            $result = QUI::getDataBase()->fetch([
+                'select' => ['global_process_id'],
+                'from'   => Subscriptions::getSubscriptionsTable(),
+                'where'  => [
+                    'paymill_subscription_id' => $subscriptionId
+                ],
+                'limit'  => 1
+            ]);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return false;
+        }
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return $result[0]['global_process_id'];
     }
 }
