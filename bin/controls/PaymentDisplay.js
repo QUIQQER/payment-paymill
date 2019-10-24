@@ -180,8 +180,13 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                                 self.fireEvent('processingError', [self]);
                             });
                         }, function (PaymillError) {
+                            checkoutLoaderHide();
+
                             if (!("apierror" in PaymillError)) {
-                                QUILocale.get(pkg, 'PaymentDisplay.service_provider_error');
+                                self.$showErrorMsg(
+                                    QUILocale.get(pkg, 'PaymentDisplay.service_provider_error')
+                                );
+
                                 self.fireEvent('processingError', [self]);
 
                                 return;
@@ -198,7 +203,10 @@ define('package/quiqqer/payment-paymill/bin/controls/PaymentDisplay', [
                                     break;
 
                                 default:
-                                    QUILocale.get(pkg, 'PaymentDisplay.service_provider_error');
+                                    self.$showErrorMsg(
+                                        QUILocale.get(pkg, 'PaymentDisplay.service_provider_error')
+                                    );
+
                                     self.fireEvent('processingError', [self]);
                             }
                         });
