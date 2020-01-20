@@ -537,7 +537,8 @@ class Subscriptions
                     'type'  => 'IN',
                     'value' => $paymentTypeIds
                 ]
-            ]
+            ],
+            'order'  => 'date ASC'
         ]);
 
         $invoiceIds = [];
