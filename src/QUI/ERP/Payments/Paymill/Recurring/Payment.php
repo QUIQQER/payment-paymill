@@ -226,6 +226,34 @@ class Payment extends BasePayment implements RecurringPaymentInterface
     }
 
     /**
+     * Checks if the subscription is active at QUIQQER
+     *
+     * @param string|int $subscriptionId - Payment provider subscription ID
+     * @return bool
+     */
+    public function isSubscriptionActiveAtQuiqqer($subscriptionId)
+    {
+        try {
+            $result = QUI::getDataBase()->fetch([
+                'select' => ['active'],
+                'from'   => Subscriptions::getSubscriptionsTable(),
+                'where'  => [
+                    'paymill_subscription_id' => $subscriptionId
+                ]
+            ]);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return false;
+        }
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return !empty($result[0]['active']);
+    }
+
+    /**
      * Get global processing ID of a subscription
      *
      * @param string|int $subscriptionId
